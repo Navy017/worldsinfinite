@@ -5,6 +5,8 @@ gets continents, climate, rivers and biomes, peoples, faiths and realms, towns a
 war. It also gets a living history and one or two hidden truths that you uncover by reading the
 world's own documents.
 
+**Play it:** https://navyofficiall011.github.io/worldsinfinite/ (once GitHub Pages is on).
+
 **Version 1.** Everything runs in the browser, and a world takes about half a second to generate.
 
 ## What a world has
