@@ -1,0 +1,1629 @@
+<!doctype html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Worldforge Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&display=swap">
+<style>
+:root{
+  --bg:#e3e8ea; --panel:#f6f8f8; --raise:#ffffff; --ink:#1b2730; --muted:#58676f; --line:#cfd7db;
+  --accent:#90601a; --accent-ink:#ffffff; --chip:#e9eef0; --focus:#2d6f95;
+  --danger-bg:#f7ddd6; --danger-ink:#7a2216; --titan-bg:#eadcf1; --titan-ink:#4f2266;
+  --myst-bg:#f6ebcc; --myst-ink:#6a4a0c; --wood-bg:#dcebdd; --wood-ink:#23502f;
+  --shadow:0 10px 30px rgba(18,32,42,.18);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1418; --panel:#141c22; --raise:#1a242b; --ink:#e1e7ea; --muted:#8f9da5; --line:#27343c;
+    --accent:#d9a547; --accent-ink:#1a1206; --chip:#1c272e; --focus:#7cc0e6;
+    --danger-bg:#3e1d18; --danger-ink:#f2b3a6; --titan-bg:#2f2139; --titan-ink:#dcb9f0;
+    --myst-bg:#3a2f14; --myst-ink:#f0d489; --wood-bg:#1b3222; --wood-ink:#a9d8b4;
+    --shadow:0 10px 30px rgba(0,0,0,.5);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1418; --panel:#141c22; --raise:#1a242b; --ink:#e1e7ea; --muted:#8f9da5; --line:#27343c;
+  --accent:#d9a547; --accent-ink:#1a1206; --chip:#1c272e; --focus:#7cc0e6;
+  --danger-bg:#3e1d18; --danger-ink:#f2b3a6; --titan-bg:#2f2139; --titan-ink:#dcb9f0;
+  --myst-bg:#3a2f14; --myst-ink:#f0d489; --wood-bg:#1b3222; --wood-ink:#a9d8b4;
+  --shadow:0 10px 30px rgba(0,0,0,.5);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Alegreya Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{height:100%;display:grid;grid-template-columns:minmax(260px,300px) 1fr;gap:12px;padding:12px 16px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow-y:auto;padding:18px 16px 22px;display:flex;flex-direction:column;gap:20px;min-height:0}
+.brand h1{font:400 31px/1 "IM Fell English SC",Georgia,serif;margin:0;letter-spacing:.02em}
+.brand p{margin:6px 0 0;color:var(--muted);font-size:14px}
+.group{display:flex;flex-direction:column;gap:11px}
+.group h2{font:700 11.5px/1 "Alegreya Sans",sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:0}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:baseline}
+.ctl label{font-size:14.5px}
+.ctl output{font:500 12.5px "IBM Plex Mono",ui-monospace,monospace;color:var(--accent);font-variant-numeric:tabular-nums}
+.ctl input[type=range]{grid-column:1/-1;width:100%;accent-color:var(--accent);margin:3px 0 0}
+.ctl .ends{grid-column:1/-1;display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.seedrow{display:flex;gap:6px}
+input[type=text]{flex:1;min-width:0;font:500 13.5px "IBM Plex Mono",ui-monospace,monospace;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:var(--raise);color:var(--ink)}
+button{font:inherit;cursor:pointer;border-radius:7px;border:1px solid var(--line);background:var(--raise);color:var(--ink);padding:7px 11px}
+button:hover{border-color:var(--muted)}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.btnrow{display:flex;gap:6px}
+.btnrow button{flex:1}
+.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.primary:hover{border-color:var(--accent);filter:brightness(1.06)}
+.stats{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-size:14px}
+.stats dt{color:var(--muted)}
+.stats dd{margin:0;text-align:right;font:500 13px "IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.hint{font-size:13px;color:var(--muted);margin:0}
+.stage{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--raise);flex-wrap:wrap}
+.seg button{border:0;border-radius:0;padding:7px 14px;background:transparent}
+.seg button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);font-weight:700}
+.layers{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--line);font-size:13.5px;cursor:pointer;user-select:none}
+.chip input{accent-color:var(--accent);margin:0}
+.mapwrap{position:relative;flex:1;min-height:0;border-radius:10px;overflow:hidden;background:#1d3a4f;border:1px solid var(--line)}
+#map{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+#map.dragging{cursor:grabbing}
+.zoom{position:absolute;top:10px;left:10px;display:flex;flex-direction:column;gap:4px}
+.zoom button{width:34px;height:34px;padding:0;font-size:18px;line-height:1;background:rgba(250,248,242,.93);color:#1b2730;border-color:rgba(0,0,0,.18)}
+.status{position:absolute;top:10px;left:50%;transform:translateX(-50%);background:rgba(18,26,32,.86);color:#f1ece0;padding:6px 14px;border-radius:999px;font-size:13.5px;pointer-events:none;white-space:nowrap;max-width:calc(100% - 110px);overflow:hidden;text-overflow:ellipsis}
+.card{background:color-mix(in srgb,var(--raise) 95%,transparent);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:10px}
+#inspector{position:absolute;left:10px;bottom:10px;width:min(330px,calc(100% - 20px));max-height:calc(100% - 20px);overflow:auto;padding:14px 16px 16px}
+#inspector h3{font:400 23px/1.1 "IM Fell English",Georgia,serif;margin:0 28px 3px 0;text-wrap:balance}
+#inspector h4{font:700 11px/1 "Alegreya Sans",sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin:14px 0 6px}
+.sub{color:var(--muted);font-size:14px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;margin:10px 0 0;font-size:14px}
+.kv dt{color:var(--muted)}
+.kv dd{margin:0}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:13px;font-variant-numeric:tabular-nums}
+.tags{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+.tag{font-size:13.5px;padding:6px 9px;border-radius:7px;line-height:1.35}
+.tag b{display:block;font-weight:700}
+.t-danger{background:var(--danger-bg);color:var(--danger-ink)}
+.t-titan{background:var(--titan-bg);color:var(--titan-ink)}
+.t-myst{background:var(--myst-bg);color:var(--myst-ink)}
+.t-wood{background:var(--wood-bg);color:var(--wood-ink)}
+.close{position:absolute;top:8px;right:8px;width:30px;height:30px;padding:0;border:0;background:transparent;color:var(--muted);font-size:22px;line-height:1}
+#legend{position:absolute;top:10px;right:10px;width:210px;max-height:calc(100% - 60px);overflow:auto;padding:10px 12px;font-size:13px}
+#legend h5{margin:0 0 6px;font:700 11px/1 "Alegreya Sans",sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}
+#legend .li{display:flex;align-items:center;gap:8px;line-height:1.55}
+#legend .sep{height:1px;background:var(--line);margin:7px 0}
+.sw{width:15px;height:11px;border-radius:2px;flex:none;border:1px solid rgba(0,0,0,.25)}
+.bar{height:10px;border-radius:3px;border:1px solid rgba(0,0,0,.25);margin:4px 0 2px}
+.barlab{display:flex;justify-content:space-between;font:11px "IBM Plex Mono",ui-monospace,monospace;color:var(--muted)}
+#tip{position:absolute;pointer-events:none;background:rgba(18,26,32,.9);color:#f3efe6;padding:4px 9px;border-radius:6px;font-size:13px;white-space:nowrap;transform:translate(14px,14px)}
+#legendToggle{position:absolute;top:10px;right:10px;display:none;background:rgba(250,248,242,.93);color:#1b2730;border-color:rgba(0,0,0,.18);font-size:13px;padding:6px 10px}
+@media (max-width:860px){
+  html,body{height:auto}
+  .app{grid-template-columns:1fr;height:auto}
+  .stage{order:-1}
+  .mapwrap{flex:none;height:66vh;min-height:340px}
+  #legend{top:48px;width:190px}
+  #legendToggle{display:block}
+  #legend.collapsed{display:none}
+}
+</style>
+
+<div class="app">
+  <aside class="panel" aria-label="World settings">
+    <header class="brand">
+      <h1>Worldforge</h1>
+      <p>Procedural atlas of continents, realms and wild places</p>
+    </header>
+    <section class="group">
+      <h2>World seed</h2>
+      <div class="seedrow">
+        <input type="text" id="seed" aria-label="World seed" spellcheck="false" autocomplete="off">
+        <button id="dice" title="Roll a new seed" aria-label="Roll a new seed">⚄</button>
+      </div>
+      <div class="btnrow">
+        <button class="primary" id="gen">Generate world</button>
+      </div>
+      <p class="hint">Same seed and settings always give the same world. Moving a slider regenerates only the parts it affects.</p>
+    </section>
+    <div id="controls" style="display:contents"></div>
+    <section class="group">
+      <h2>This world</h2>
+      <dl class="stats" id="stats"></dl>
+    </section>
+  </aside>
+
+  <main class="stage">
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Map mode" id="modes">
+        <button data-mode="terrain" aria-pressed="true">Terrain</button>
+        <button data-mode="political" aria-pressed="false">Political</button>
+        <button data-mode="biome" aria-pressed="false">Biomes</button>
+        <button data-mode="height" aria-pressed="false">Elevation</button>
+      </div>
+      <div class="layers" id="layers">
+        <label class="chip"><input type="checkbox" id="L-rivers" checked> Rivers</label>
+        <label class="chip"><input type="checkbox" id="L-provinces" checked> Provinces</label>
+        <label class="chip"><input type="checkbox" id="L-labels" checked> Names</label>
+        <label class="chip"><input type="checkbox" id="L-wildlife" checked> Hostile wildlife</label>
+        <label class="chip"><input type="checkbox" id="L-titans" checked> Titans</label>
+        <label class="chip"><input type="checkbox" id="L-mysteries" checked> Mysteries</label>
+      </div>
+    </div>
+    <div class="mapwrap" id="mapwrap">
+      <canvas id="map" aria-label="Generated world map. Drag to pan, scroll to zoom, click a province for details."></canvas>
+      <div class="zoom">
+        <button id="zin" aria-label="Zoom in">+</button>
+        <button id="zout" aria-label="Zoom out">−</button>
+        <button id="zfit" aria-label="Fit map" style="font-size:14px">⤢</button>
+      </div>
+      <div class="status" id="status">Loading…</div>
+      <button id="legendToggle">Legend</button>
+      <div id="legend" class="card collapsed"></div>
+      <div id="inspector" class="card" hidden></div>
+      <div id="tip" hidden></div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3-delaunay@6.0.4/dist/d3-delaunay.min.js"></script>
+<script>
+"use strict";
+const W = 1600, H = 1000;
+const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
+const lerp = (a, b, t) => a + (b - a) * t;
+const tick = () => new Promise(r => requestAnimationFrame(() => setTimeout(r, 0)));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmt = n => Math.round(n).toLocaleString("en-US");
+
+/* ---------------- random + noise ---------------- */
+function hashStr(str) {
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = h << 13 | h >>> 19; }
+  h = Math.imul(h ^ h >>> 16, 2246822507); h = Math.imul(h ^ h >>> 13, 3266489909);
+  return (h ^= h >>> 16) >>> 0;
+}
+function makeRng(seedStr) {
+  let a = hashStr(seedStr);
+  const f = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  return {
+    f, range: (lo, hi) => lo + (hi - lo) * f(), int: (lo, hi) => Math.floor(lo + (hi - lo + 1) * f()),
+    pick: arr => arr[Math.floor(f() * arr.length)], chance: p => f() < p,
+  };
+}
+function shuffle(rng, a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng.f() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+function weightedPick(rng, items, wfn) {
+  let tot = 0; for (const it of items) tot += wfn(it);
+  if (tot <= 0) return null;
+  let r = rng.f() * tot;
+  for (const it of items) { r -= wfn(it); if (r <= 0) return it; }
+  return items[items.length - 1];
+}
+function makeNoise(rng) {
+  const p = [...Array(256).keys()]; shuffle(rng, p);
+  const perm = new Uint8Array(512); for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+  const G = [[1, 1], [-1, 1], [1, -1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]];
+  const F2 = 0.5 * (Math.sqrt(3) - 1), G2 = (3 - Math.sqrt(3)) / 6;
+  function n2(x, y) {
+    const s = (x + y) * F2, i = Math.floor(x + s), j = Math.floor(y + s), t = (i + j) * G2;
+    const x0 = x - (i - t), y0 = y - (j - t);
+    const i1 = x0 > y0 ? 1 : 0, j1 = 1 - i1;
+    const x1 = x0 - i1 + G2, y1 = y0 - j1 + G2, x2 = x0 - 1 + 2 * G2, y2 = y0 - 1 + 2 * G2;
+    const ii = i & 255, jj = j & 255;
+    let n = 0, q;
+    let t0 = 0.5 - x0 * x0 - y0 * y0; if (t0 > 0) { q = G[perm[ii + perm[jj]] & 7]; t0 *= t0; n += t0 * t0 * (q[0] * x0 + q[1] * y0); }
+    let t1 = 0.5 - x1 * x1 - y1 * y1; if (t1 > 0) { q = G[perm[ii + i1 + perm[jj + j1]] & 7]; t1 *= t1; n += t1 * t1 * (q[0] * x1 + q[1] * y1); }
+    let t2 = 0.5 - x2 * x2 - y2 * y2; if (t2 > 0) { q = G[perm[ii + 1 + perm[jj + 1]] & 7]; t2 *= t2; n += t2 * t2 * (q[0] * x2 + q[1] * y2); }
+    return 70 * n;
+  }
+  function fbm(x, y, oct = 5) { let a = 1, f = 1, s = 0, nm = 0; for (let o = 0; o < oct; o++) { s += a * n2(x * f, y * f); nm += a; a *= 0.5; f *= 2; } return s / nm; }
+  function ridged(x, y, oct = 4) { let a = 1, f = 1, s = 0, nm = 0; for (let o = 0; o < oct; o++) { s += a * (1 - Math.abs(n2(x * f, y * f))); nm += a; a *= 0.5; f *= 2; } return s / nm; }
+  return { n2, fbm, ridged };
+}
+class Heap {
+  constructor() { this.k = []; this.v = []; this.lk = 0; }
+  get size() { return this.v.length; }
+  push(v, key) {
+    const K = this.k, V = this.v; let i = V.length; K.push(key); V.push(v);
+    while (i > 0) { const p = (i - 1) >> 1; if (K[p] <= key) break; K[i] = K[p]; V[i] = V[p]; i = p; }
+    K[i] = key; V[i] = v;
+  }
+  pop() {
+    const K = this.k, V = this.v, top = V[0]; this.lk = K[0];
+    const lk = K.pop(), lv = V.pop(), n = V.length;
+    if (n > 0) {
+      let i = 0;
+      for (;;) { const l = 2 * i + 1; if (l >= n) break; const r = l + 1; const m = (r < n && K[r] < K[l]) ? r : l; if (K[m] >= lk) break; K[i] = K[m]; V[i] = V[m]; i = m; }
+      K[i] = lk; V[i] = lv;
+    }
+    return top;
+  }
+}
+
+/* ---------------- names ---------------- */
+function makeLanguage(r) {
+  const ON = ["b","c","d","f","g","h","k","l","m","n","p","r","s","t","v","z","th","sh","kh","dr","br","tr","gr","st","sk","vr","gl","ch","j","y","w","q","ph","fr","kr","sl"];
+  const VO = ["a","e","i","o","u","a","e","o","ae","ai","ei","ou","ia","y","aa","ea","io","ue"];
+  const CO = ["n","r","l","s","th","m","k","nd","rn","st","x","sh","ll","rd","g","t","ng","rk","ss","z","lm"];
+  const SU = ["ia","or","heim","and","ar","os","eth","ium","al","ir","un","ath","ea","orn","esh","ova","ane","mar","gard","hold","wyn","dor","rim","tal","kar","is","ek","ul","era","oth"];
+  const sub = (arr, n) => [...new Set(shuffle(r, arr.slice()))].slice(0, n);
+  const on = sub(ON, r.int(8, 14)), vo = sub(VO, r.int(4, 7)), co = sub(CO, r.int(3, 7)), su = sub(SU, r.int(3, 6));
+  const codaP = r.range(0.15, 0.5), vStart = r.range(0.05, 0.3), sufP = r.range(0.2, 0.5), maxS = r.int(2, 3);
+  function word(rng, used) {
+    for (let t = 0; t < 40; t++) {
+      let w = ""; const n = rng.int(1, maxS);
+      for (let i = 0; i < n; i++) w += (rng.chance(vStart) ? "" : rng.pick(on)) + rng.pick(vo) + (rng.chance(codaP) ? rng.pick(co) : "");
+      if (n === 1 || rng.chance(sufP)) w += rng.pick(su);
+      w = w.replace(/(.)\1\1+/g, "$1$1").replace(/([aeiouy]{2})[aeiouy]+/g, "$1");
+      if (w.length < 4 || w.length > 11) continue;
+      const W2 = w[0].toUpperCase() + w.slice(1);
+      if (used) { if (used.has(W2)) continue; used.add(W2); }
+      return W2;
+    }
+    return "Nameless";
+  }
+  return { word };
+}
+
+/* ---------------- biome + feature tables ---------------- */
+const BIOMES = [
+  { k: "glacier", n: "Glacier", c: "#e8edef" },
+  { k: "tundra", n: "Tundra", c: "#b5b699" },
+  { k: "coldsteppe", n: "Cold Steppe", c: "#b9b48b" },
+  { k: "boreal", n: "Boreal Forest (Taiga)", c: "#4c6a4f", forest: 1 },
+  { k: "grass", n: "Grassland", c: "#a8b56c" },
+  { k: "tempforest", n: "Temperate Forest", c: "#5e8a4b", forest: 1 },
+  { k: "temprain", n: "Temperate Rainforest", c: "#3d7254", forest: 1 },
+  { k: "colddesert", n: "Cold Desert", c: "#c6bb98" },
+  { k: "desert", n: "Desert", c: "#e1ca8e" },
+  { k: "badlands", n: "Badlands", c: "#bd8a5e" },
+  { k: "savanna", n: "Savanna", c: "#c5b864" },
+  { k: "dryforest", n: "Tropical Dry Forest", c: "#8a9b46", forest: 1 },
+  { k: "rainforest", n: "Tropical Rainforest", c: "#2e6a3a", forest: 1 },
+  { k: "swamp", n: "Swamp", c: "#5e6d4b" },
+  { k: "mangrove", n: "Mangrove", c: "#4a6b55", forest: 1 },
+  { k: "alpine", n: "Alpine Meadow & Scree", c: "#9c947f" },
+  { k: "peaks", n: "Snowcapped Peaks", c: "#f1efeb" },
+];
+const B = Object.fromEntries(BIOMES.map((b, i) => [b.k, i]));
+const TERR = ["Plains", "Hills", "Mountains", "High peaks", "Plateau"];
+const SPECIAL = [null,
+  { n: "Ancient Forest", c: "#23503a", hatch: "#123522", d: "Old-growth trees older than any kingdom. Paths close behind travellers.", fits: [B.tempforest, B.temprain, B.boreal] },
+  { n: "Fungal Forest", c: "#7c5a8f", hatch: "#4a2f5c", d: "Mushroom caps as tall as towers and drifting clouds of spores.", fits: [B.rainforest, B.swamp, B.temprain, B.mangrove, B.dryforest] },
+  { n: "Crystal Forest", c: "#8cc4d4", hatch: "#4b8aa0", d: "Trees grown through with glassy mineral. They ring in the wind.", fits: [B.boreal, B.alpine, B.tundra] },
+  { n: "Blighted Wood", c: "#5d544a", hatch: "#2e2822", d: "Grey, dying woodland. The rot spreads a little every year.", fits: [B.tempforest, B.dryforest, B.boreal, B.rainforest] },
+];
+const WILD = {
+  glacier: ["Ice Wyrms", "Frost Wolves"], tundra: ["Frost Wolves", "Ice Bears", "Sabre Cats"], coldsteppe: ["Steppe Raptors", "Sabre Cats"],
+  boreal: ["Dire Wolves", "Great Bears", "Shadow Elk"], grass: ["Terror Birds", "War Boars"], tempforest: ["Giant Spiders", "Dire Wolves", "Owlbears"],
+  temprain: ["Moss Stalkers", "Giant Spiders"], colddesert: ["Rock Vultures", "Sand Wolves"], desert: ["Giant Scorpions", "Dune Stalkers", "Sand Wyrms"],
+  badlands: ["Basilisks", "Carrion Rocs"], savanna: ["Great Lions", "Thunder Rhinos"], dryforest: ["Blood Panthers", "Razorback Swine"],
+  rainforest: ["Venom Stalkers", "Giant Constrictors", "Blood Panthers"], swamp: ["Bog Hydras", "Giant Leeches", "Mire Crocodiles"],
+  mangrove: ["Saltmarsh Crocodiles", "Razor Crabs"], alpine: ["Wyverns", "Cliff Rocs", "Rock Trolls"], peaks: ["Wyverns", "Storm Griffons"],
+};
+const WILD_WEIGHT = { glacier: .4, tundra: 1, coldsteppe: .8, boreal: 1.5, grass: .7, tempforest: 1.5, temprain: 2, colddesert: 1, desert: 1.2, badlands: 2, savanna: 1.5, dryforest: 2, rainforest: 3, swamp: 3, mangrove: 2, alpine: 2, peaks: 1 };
+function titanKinds(bk) {
+  if (bk === "peaks" || bk === "alpine") return ["Stone Colossus", "Elder Wyrm", "Storm Roc"];
+  if (bk === "desert" || bk === "colddesert" || bk === "badlands") return ["Great Sand Wyrm", "Scarab Colossus", "Dune Leviathan"];
+  if (bk === "tempforest" || bk === "temprain" || bk === "boreal") return ["Antlered Titan", "Elder World-Boar", "Great Moss Tortoise"];
+  if (bk === "rainforest" || bk === "dryforest" || bk === "mangrove") return ["Primeval Serpent", "Thunder Ape", "Canopy Titan"];
+  if (bk === "tundra" || bk === "glacier" || bk === "coldsteppe") return ["Frost Behemoth", "Mammoth King", "White Wyrm"];
+  if (bk === "swamp") return ["Mire Leviathan", "Hundred-Headed Hydra"];
+  return ["Thunderhoof Behemoth", "Titan Aurochs", "Sky Whale"];
+}
+const MYST = [
+  { n: "Ancient Ruins", d: "Toppled halls of a civilisation nobody remembers building.", ok: () => true },
+  { n: "Ley Nexus", d: "Several ley lines cross here. Spells behave strangely.", ok: () => true },
+  { n: "Planar Rift", d: "A tear in the world. Things come through at night.", ok: () => true },
+  { n: "Petrified Titan", d: "The stone corpse of something enormous, half buried.", ok: () => true },
+  { n: "Standing Stones", d: "A ring of stones whose shadows fall at the wrong angle.", ok: p => [B.grass, B.coldsteppe, B.tundra, B.tempforest, B.savanna].includes(p.biome) },
+  { n: "Sunken Temple", d: "A temple visible beneath the waves at low tide.", ok: p => p.coastal },
+  { n: "Eternal Storm", d: "A storm that has not moved or ended in living memory.", ok: p => p.coastal || p.terr >= 2 },
+  { n: "Meteor Crater", d: "A glassy crater. The fallen star is still warm.", ok: p => [B.desert, B.colddesert, B.badlands, B.grass, B.savanna, B.tundra].includes(p.biome) },
+  { n: "Whispering Grove", d: "The trees repeat what travellers said a day earlier.", ok: p => BIOMES[p.biome].forest },
+  { n: "Frozen Citadel", d: "A fortress sealed in ice, its lamps still lit inside.", ok: p => [B.glacier, B.tundra, B.peaks].includes(p.biome) },
+  { n: "Glass Desert", d: "Sand fused to glass by some ancient fire.", ok: p => [B.desert, B.badlands].includes(p.biome) },
+  { n: "Floating Isles", d: "Rocks drift in the air above the peaks, trailing waterfalls.", ok: p => p.terr >= 2 },
+  { n: "Singing Caves", d: "Wind through the caves makes a slow, deep music.", ok: p => p.terr === 1 || p.terr === 2 || p.terr === 4 },
+  { n: "Bottomless Sinkhole", d: "Stones dropped in are never heard to land.", ok: p => p.terr <= 1 },
+];
+const GOV = [["Kingdom of $", 3], ["Duchy of $", 2], ["Principality of $", 1.5], ["$ Republic", 1.2], ["Grand Duchy of $", 1], ["Realm of $", 1],
+  ["Dominion of $", .8], ["Theocracy of $", .7], ["Free Cities of $", .6], ["$ League", .6], ["Khaganate of $", .6], ["$ Confederacy", .6], ["Sultanate of $", .6], ["Margraviate of $", .4]];
+const REALM_COLORS = ["#d6a676", "#a4b38a", "#cb897b", "#8fb1ca", "#baa1ca", "#dac47f", "#86b9a7", "#caa0ab", "#a0b4dc", "#ddac80", "#a8c897", "#c1b097", "#c8b8e1", "#e1b4a0"];
+const HOSTILE_COL = [null, "#c58a2a", "#c4532a", "#9c1e1e"];
+const TIER_NAME = [null, "Dangerous", "Deadly", "Lethal"];
+
+/* ---------------- stage 0: mesh ---------------- */
+function buildMesh(n, rng) {
+  const s0 = Math.sqrt(W * H / n), cols = Math.max(4, Math.round(W / s0)), rows = Math.max(4, Math.round(H / s0));
+  const sx = W / cols, sy = H / rows, N = cols * rows, pts = new Float64Array(N * 2);
+  for (let r = 0, k = 0; r < rows; r++) for (let c = 0; c < cols; c++, k++) {
+    pts[2 * k] = (c + 0.5 + (rng.f() - 0.5) * 0.8) * sx;
+    pts[2 * k + 1] = (r + 0.5 + (rng.f() - 0.5) * 0.8) * sy;
+  }
+  const del = new d3.Delaunay(pts), vor = del.voronoi([0, 0, W, H]);
+  const x = new Float32Array(N), y = new Float32Array(N);
+  for (let i = 0; i < N; i++) { x[i] = pts[2 * i]; y[i] = pts[2 * i + 1]; }
+  const polyStart = new Int32Array(N + 1), tmp = [];
+  for (let i = 0; i < N; i++) {
+    polyStart[i] = tmp.length / 2;
+    const poly = vor.cellPolygon(i);
+    if (poly) for (let j = 0; j < poly.length - 1; j++) tmp.push(poly[j][0], poly[j][1]);
+  }
+  polyStart[N] = tmp.length / 2;
+  const polyXY = Float32Array.from(tmp);
+  const tri = del.triangles, he = del.halfedges, cc = vor.circumcenters;
+  const A = [], Bv = [], XY = [];
+  const cl = (v, m) => v < 0 ? 0 : v > m ? m : v;
+  for (let e = 0; e < he.length; e++) {
+    const o = he[e]; if (o < e) continue;
+    const a = tri[e], b = tri[e % 3 === 2 ? e - 2 : e + 1], t1 = (e / 3) | 0, t2 = (o / 3) | 0;
+    A.push(a); Bv.push(b);
+    XY.push(cl(cc[2 * t1], W), cl(cc[2 * t1 + 1], H), cl(cc[2 * t2], W), cl(cc[2 * t2 + 1], H));
+  }
+  const E = A.length, eA = Int32Array.from(A), eB = Int32Array.from(Bv), eXY = Float32Array.from(XY);
+  const nStart = new Int32Array(N + 1);
+  for (let e = 0; e < E; e++) { nStart[eA[e] + 1]++; nStart[eB[e] + 1]++; }
+  for (let i = 0; i < N; i++) nStart[i + 1] += nStart[i];
+  const fp = nStart.slice(0, N), nbr = new Int32Array(2 * E);
+  for (let e = 0; e < E; e++) { nbr[fp[eA[e]]++] = eB[e]; nbr[fp[eB[e]]++] = eA[e]; }
+  return { N, x, y, s: Math.sqrt(sx * sy), cellArea: sx * sy, del, polyStart, polyXY, E, eA, eB, eXY, nStart, nbr };
+}
+
+function bfsFrom(M, sources, allow) {
+  const d = new Int32Array(M.N).fill(-1), q = new Int32Array(M.N); let h = 0, t = 0;
+  for (const s of sources) { if (d[s] < 0) { d[s] = 0; q[t++] = s; } }
+  while (h < t) {
+    const c = q[h++];
+    for (let k = M.nStart[c]; k < M.nStart[c + 1]; k++) { const n = M.nbr[k]; if (d[n] < 0 && (!allow || allow(n))) { d[n] = d[c] + 1; q[t++] = n; } }
+  }
+  return d;
+}
+function coastDistance(M, isLand) {
+  const src = [];
+  for (let i = 0; i < M.N; i++) {
+    for (let k = M.nStart[i]; k < M.nStart[i + 1]; k++) if (isLand(M.nbr[k]) !== isLand(i)) { src.push(i); break; }
+  }
+  const d = bfsFrom(M, src);
+  for (let i = 0; i < M.N; i++) if (d[i] < 0) d[i] = 999;
+  return d;
+}
+// distance from region border inward, used to place labels at the "heart" of a region
+function innerDist(M, label) {
+  const N = M.N, d = new Int32Array(N).fill(-1), q = new Int32Array(N); let h = 0, t = 0;
+  for (let i = 0; i < N; i++) {
+    if (label[i] < 0) continue;
+    for (let k = M.nStart[i]; k < M.nStart[i + 1]; k++) if (label[M.nbr[k]] !== label[i]) { d[i] = 0; q[t++] = i; break; }
+  }
+  while (h < t) {
+    const c = q[h++];
+    for (let k = M.nStart[c]; k < M.nStart[c + 1]; k++) { const n = M.nbr[k]; if (d[n] < 0 && label[n] === label[c]) { d[n] = d[c] + 1; q[t++] = n; } }
+  }
+  return d;
+}
+function heartCells(label, d, count) {
+  const best = new Int32Array(count).fill(-1), bv = new Int32Array(count).fill(-2);
+  for (let i = 0; i < label.length; i++) { const l = label[i]; if (l >= 0 && d[i] > bv[l]) { bv[l] = d[i]; best[l] = i; } }
+  return best;
+}
+
+/* ---------------- stage 1: land, mountains, water ---------------- */
+function genTerrain(M, P, seed) {
+  const rng = makeRng(seed + "|terrain"), nz = makeNoise(rng);
+  const { N, x, y, nStart, nbr } = M;
+  const C = P.continents, landFrac = P.land / 100;
+  const totalR = Math.sqrt(landFrac * W * H / Math.PI);
+  const wAmp = totalR / Math.sqrt(C) * 0.42;
+  const wx = new Float32Array(N), wy = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    wx[i] = x[i] + nz.fbm(x[i] * 0.0032 + 11.3, y[i] * 0.0032 + 7.1, 4) * wAmp;
+    wy[i] = y[i] + nz.fbm(x[i] * 0.0032 - 5.7, y[i] * 0.0032 + 23.9, 4) * wAmp;
+  }
+  // continents: warped ellipses spread apart
+  const ws = []; for (let c = 0; c < C; c++) ws.push(rng.range(0.55, 1.45));
+  const wsum = ws.reduce((a, b) => a + b, 0), conts = [];
+  for (let c = 0; c < C; c++) {
+    const r = totalR * Math.sqrt(ws[c] / wsum) * 1.1, aspect = rng.range(0.7, 1.45), rot = rng.range(0, Math.PI);
+    let best = null, bs = -Infinity;
+    for (let t = 0; t < 50; t++) {
+      const mx = Math.min(r * 0.7 + 60, W / 2), my = Math.min(r * 0.7 + 60, H / 2);
+      const cx = rng.range(mx, W - mx), cy = rng.range(my, H - my);
+      let s;
+      if (!conts.length) s = C === 1 ? -Math.hypot(cx - W / 2, cy - H / 2) : rng.f();
+      else { s = Infinity; for (const o of conts) s = Math.min(s, Math.hypot(cx - o.cx, cy - o.cy) - 0.9 * (r + o.r)); s += rng.f() * 30; }
+      if (s > bs) { bs = s; best = { cx, cy }; }
+    }
+    conts.push({ cx: best.cx, cy: best.cy, r, aspect, cs: Math.cos(rot), sn: Math.sin(rot) });
+  }
+  const cval = (c, px, py) => { const dx = px - c.cx, dy = py - c.cy; const u = (dx * c.cs + dy * c.sn) / c.aspect, v = (-dx * c.sn + dy * c.cs) * c.aspect; return 1 - Math.sqrt(u * u + v * v) / c.r; };
+  const edgeR = (c, ang) => { const dx = Math.cos(ang), dy = Math.sin(ang); const u = (dx * c.cs + dy * c.sn) / c.aspect, v = (-dx * c.sn + dy * c.cs) * c.aspect; return c.r / Math.sqrt(u * u + v * v); };
+  const v = new Float32Array(N).fill(-3);
+  for (const c of conts) for (let i = 0; i < N; i++) { const q = cval(c, wx[i], wy[i]); if (q > v[i]) v[i] = q; }
+  // peninsulas: tapered, bent arms reaching out from each continent
+  const pens = [];
+  for (const c of conts) {
+    const n = Math.max(0, P.peninsulas + (P.peninsulas > 0 ? rng.int(-1, 1) : 0));
+    for (let k = 0; k < n; k++) {
+      const ang = rng.range(0, Math.PI * 2), re = edgeR(c, ang), dx = Math.cos(ang), dy = Math.sin(ang);
+      const ax = c.cx + dx * re * rng.range(0.55, 0.8), ay = c.cy + dy * re * rng.range(0.55, 0.8);
+      const L = re * rng.range(0.55, 1.0), bx = ax + dx * L, by = ay + dy * L, bend = L * rng.range(-0.35, 0.35);
+      const w0 = c.r * rng.range(0.1, 0.2);
+      pens.push({ ax, ay, mx: (ax + bx) / 2 - dy * bend, my: (ay + by) / 2 + dx * bend, bx, by, w0, w1: w0 * rng.range(0.25, 0.5) });
+    }
+  }
+  let segT = 0;
+  const segD = (px, py, ax, ay, bx, by) => {
+    const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy;
+    let t = l2 ? ((px - ax) * dx + (py - ay) * dy) / l2 : 0; t = t < 0 ? 0 : t > 1 ? 1 : t; segT = t;
+    const qx = ax + t * dx - px, qy = ay + t * dy - py; return Math.sqrt(qx * qx + qy * qy);
+  };
+  for (const p of pens) {
+    for (let i = 0; i < N; i++) {
+      const d1 = segD(wx[i], wy[i], p.ax, p.ay, p.mx, p.my), t1 = segT;
+      const d2 = segD(wx[i], wy[i], p.mx, p.my, p.bx, p.by), t2 = segT;
+      const T = d1 < d2 ? t1 * 0.5 : 0.5 + t2 * 0.5, d = Math.min(d1, d2), w = lerp(p.w0, p.w1, T);
+      const q = (1 - d / w) * 0.5; if (q > v[i]) v[i] = q;
+    }
+  }
+  // islands and archipelago chains, placed in open water
+  const oceanAt = (px, py) => { let b = -3; for (const c of conts) b = Math.max(b, cval(c, px, py)); return b; };
+  const isles = [];
+  const nSingle = Math.round(P.islands * 0.35), nChain = Math.round(P.islands / 16);
+  for (let k = 0, tries = 0; k < nSingle && tries < nSingle * 30; tries++) {
+    const px = rng.range(60, W - 60), py = rng.range(60, H - 60), o = oceanAt(px, py);
+    if (o < -0.08 && o > -1.6) { isles.push({ x: px, y: py, r: rng.range(9, 28) }); k++; }
+  }
+  for (let k = 0, tries = 0; k < nChain && tries < nChain * 30; tries++) {
+    let px = rng.range(80, W - 80), py = rng.range(80, H - 80);
+    if (oceanAt(px, py) > -0.12) continue;
+    let ang = rng.range(0, Math.PI * 2); const r0 = rng.range(8, 18), cnt = rng.int(4, 10);
+    for (let j = 0; j < cnt; j++) {
+      px += Math.cos(ang) * r0 * rng.range(1.6, 2.4); py += Math.sin(ang) * r0 * rng.range(1.6, 2.4); ang += rng.range(-0.35, 0.35);
+      if (px < 50 || px > W - 50 || py < 50 || py > H - 50) break;
+      isles.push({ x: px, y: py, r: r0 * rng.range(0.6, 1.3) });
+    }
+    k++;
+  }
+  for (const is of isles) {
+    const lim = is.r * 2.5;
+    for (let i = 0; i < N; i++) {
+      if (Math.abs(x[i] - is.x) > lim || Math.abs(y[i] - is.y) > lim) continue;
+      const qx = x[i] + (wx[i] - x[i]) * 0.2, qy = y[i] + (wy[i] - y[i]) * 0.2;
+      const q = (1 - Math.hypot(qx - is.x, qy - is.y) / is.r) * 0.55; if (q > v[i]) v[i] = q;
+    }
+  }
+  // inland seas and gulfs carved out of continents
+  const seas = [];
+  for (let k = 0; k < P.seas; k++) {
+    const c = weightedPick(rng, conts, o => o.r), ang = rng.range(0, Math.PI * 2), re = edgeR(c, ang), off = rng.range(0.1, 0.95);
+    const s = { x: c.cx + Math.cos(ang) * re * off, y: c.cy + Math.sin(ang) * re * off, r: c.r * rng.range(0.14, 0.3) };
+    seas.push(s);
+    for (let i = 0; i < N; i++) {
+      const qx = x[i] + (wx[i] - x[i]) * 0.3, qy = y[i] + (wy[i] - y[i]) * 0.3;
+      const d = Math.hypot(qx - s.x, qy - s.y) / s.r; if (d < 1) v[i] -= 1.3 * (1 - d * d);
+    }
+  }
+  const h = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    let vv = v[i];
+    const de = Math.min(x[i], W - x[i], y[i], H - y[i]);
+    if (de < 100) { const f = 1 - de / 100; vv -= f * f * 2; }
+    h[i] = 0.34 * Math.tanh(2.6 * vv) + 0.11 * nz.fbm(x[i] * 0.0045 + 3, y[i] * 0.0045 - 8, 5) + 0.035 * nz.fbm(x[i] * 0.028, y[i] * 0.028, 3);
+  }
+  // tectonic plates: mountains rise where plates collide
+  const nPl = C * 2 + 4, plates = [];
+  for (let k = 0; k < nPl; k++) { const a = rng.range(0, Math.PI * 2), sp = rng.range(0.2, 1); plates.push({ x: rng.range(0, W), y: rng.range(0, H), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp }); }
+  const plate = new Uint8Array(N);
+  for (let i = 0; i < N; i++) {
+    let b = 0, bd = Infinity;
+    for (let k = 0; k < nPl; k++) { const dx = wx[i] - plates[k].x, dy = wy[i] - plates[k].y, d = dx * dx + dy * dy; if (d < bd) { bd = d; b = k; } }
+    plate[i] = b;
+  }
+  const conv = new Float32Array(N);
+  for (let e = 0; e < M.E; e++) {
+    const a = M.eA[e], b = M.eB[e]; if (plate[a] === plate[b]) continue;
+    const dx = x[b] - x[a], dy = y[b] - y[a], len = Math.hypot(dx, dy) || 1;
+    const pa = plates[plate[a]], pb = plates[plate[b]];
+    const c = ((pa.vx - pb.vx) * dx + (pa.vy - pb.vy) * dy) / len;
+    if (c > 0.1) { const cc = Math.min(c, 1.2); if (cc > conv[a]) conv[a] = cc; if (cc > conv[b]) conv[b] = cc; }
+  }
+  const mdist = new Float32Array(N).fill(Infinity), mstr = new Float32Array(N), heap = new Heap();
+  for (let i = 0; i < N; i++) if (conv[i] > 0) { mdist[i] = 0; mstr[i] = conv[i]; heap.push(i, 0); }
+  const width = rng.range(26, 42), maxD = width * 3.2;
+  while (heap.size) {
+    const c = heap.pop(), dc = heap.lk; if (dc > mdist[c]) continue;
+    for (let k = nStart[c]; k < nStart[c + 1]; k++) {
+      const n = nbr[k], nd = dc + Math.hypot(x[n] - x[c], y[n] - y[c]);
+      if (nd < mdist[n] && nd < maxD) { mdist[n] = nd; mstr[n] = mstr[c]; heap.push(n, nd); }
+    }
+  }
+  const mStr = new Float32Array(N), amp = P.mountains / 100 * 0.62;
+  for (let i = 0; i < N; i++) {
+    if (mdist[i] === Infinity) continue;
+    const d = mdist[i], rid = nz.ridged(x[i] * 0.012 + 50, y[i] * 0.012 + 50, 4);
+    mStr[i] = mstr[i] * (Math.exp(-((d / width) ** 2)) + 0.3 * Math.exp(-d / (width * 2.2))) * (0.25 + 0.95 * rid * rid);
+    h[i] += mStr[i] * amp * (h[i] > -0.05 ? 1 : 0.55);
+  }
+  // sea level chosen so land covers exactly the requested share
+  const sorted = Float32Array.from(h).sort();
+  const sl = sorted[Math.floor((1 - landFrac) * (N - 1))];
+  const e = new Float32Array(N), depth = new Float32Array(N), type = new Uint8Array(N);
+  for (let i = 0; i < N; i++) {
+    if (h[i] > sl) e[i] = Math.min(1, (h[i] - sl) / 0.8);
+    else depth[i] = Math.min(1, (sl - h[i]) / 0.45);
+  }
+  // ocean = water connected to the map edge
+  const edgeSrc = [];
+  for (let i = 0; i < N; i++) if (h[i] <= sl && (x[i] < M.s * 1.5 || x[i] > W - M.s * 1.5 || y[i] < M.s * 1.5 || y[i] > H - M.s * 1.5)) edgeSrc.push(i);
+  const od = bfsFrom(M, edgeSrc, n => h[n] <= sl);
+  const enclosed = new Uint8Array(N);
+  for (let i = 0; i < N; i++) { if (od[i] >= 0) type[i] = 1; else if (h[i] <= sl) enclosed[i] = 1; }
+  // plateaus: flat-topped raised tablelands
+  let cd = coastDistance(M, i => type[i] === 0);
+  const plateau = new Uint8Array(N), plateaus = [];
+  const cand = []; for (let i = 0; i < N; i++) if (type[i] === 0 && !enclosed[i] && cd[i] >= 3 && e[i] > 0.05 && e[i] < 0.5) cand.push(i);
+  for (let k = 0; k < P.plateaus && cand.length; k++) {
+    const c0 = rng.pick(cand), px = x[c0], py = y[c0], rp = rng.range(35, 80), target = rng.range(0.38, 0.5);
+    for (let i = 0; i < N; i++) {
+      if (type[i] !== 0 || enclosed[i]) continue;
+      const d = Math.hypot(x[i] - px, y[i] - py) / rp; if (d > 1.6) continue;
+      const mask = clamp((1 - (d + nz.fbm(x[i] * 0.018 + k * 7, y[i] * 0.018, 3) * 0.3)) * 4, 0, 1);
+      if (mask <= 0) continue;
+      const eT = e[i] > target ? target + (e[i] - target) * 0.3 : target + nz.n2(x[i] * 0.05, y[i] * 0.05) * 0.01;
+      e[i] += (eT - e[i]) * mask;
+      if (mask > 0.5) plateau[i] = k + 1;
+    }
+    plateaus.push({ x: px, y: py });
+  }
+  // priority-flood: fills depressions and gives every land cell a downhill path to the sea
+  const filled = new Float32Array(N), down = new Int32Array(N).fill(-1), vis = new Uint8Array(N), order = [];
+  const hp = new Heap();
+  for (let i = 0; i < N; i++) if (type[i] === 1) vis[i] = 1;
+  for (let i = 0; i < N; i++) {
+    if (type[i] !== 1) continue;
+    for (let k = nStart[i]; k < nStart[i + 1]; k++) { const n = nbr[k]; if (!vis[n]) { vis[n] = 1; filled[n] = e[n]; down[n] = i; hp.push(n, e[n]); } }
+  }
+  while (hp.size) {
+    const c = hp.pop(); order.push(c);
+    for (let k = nStart[c]; k < nStart[c + 1]; k++) {
+      const n = nbr[k]; if (vis[n]) continue;
+      vis[n] = 1; filled[n] = Math.max(e[n], filled[c] + 1e-6); down[n] = c; hp.push(n, filled[n]);
+    }
+  }
+  // lakes: the deepest depressions plus any enclosed water
+  const lakeC = new Uint8Array(N);
+  for (let i = 0; i < N; i++) if (type[i] === 0 && (enclosed[i] || filled[i] - e[i] > 0.008)) lakeC[i] = 1;
+  const seen = new Uint8Array(N), comps = [];
+  for (let i = 0; i < N; i++) {
+    if (!lakeC[i] || seen[i]) continue;
+    const cells = [i]; seen[i] = 1; let enc = enclosed[i];
+    for (let q = 0; q < cells.length; q++) { const c = cells[q]; for (let k = nStart[c]; k < nStart[c + 1]; k++) { const n = nbr[k]; if (lakeC[n] && !seen[n]) { seen[n] = 1; cells.push(n); if (enclosed[n]) enc = 1; } } }
+    comps.push({ cells, enc });
+  }
+  comps.sort((a, b) => b.cells.length - a.cells.length);
+  const maxLakes = 6 + Math.round(P.provinces / 45), lakes = [], lakeId = new Int32Array(N).fill(-1);
+  for (const c of comps) {
+    if (!c.enc && (lakes.length >= maxLakes || c.cells.length < 2)) continue;
+    const id = lakes.length; lakes.push({ cells: c.cells });
+    for (const i of c.cells) { type[i] = 2; lakeId[i] = id; }
+  }
+  cd = coastDistance(M, i => type[i] === 0);
+  // hillshade and slope
+  const shade = new Float32Array(N), slope = new Float32Array(N);
+  const Lx = -0.539, Ly = -0.539, Lz = 0.647;
+  for (let i = 0; i < N; i++) {
+    const ei = type[i] === 0 ? e[i] : 0; let gx = 0, gy = 0, cnt = 0;
+    for (let k = nStart[i]; k < nStart[i + 1]; k++) {
+      const n = nbr[k], dx = x[n] - x[i], dy = y[n] - y[i], d2 = dx * dx + dy * dy || 1, de = (type[n] === 0 ? e[n] : 0) - ei;
+      gx += de * dx / d2; gy += de * dy / d2; cnt++;
+    }
+    gx /= (cnt * 0.5) || 1; gy /= (cnt * 0.5) || 1;
+    slope[i] = Math.hypot(gx, gy);
+    const nx = -gx * 38, ny = -gy * 38, len = Math.sqrt(nx * nx + ny * ny + 1);
+    shade[i] = type[i] === 0 ? clamp(1 + ((nx * Lx + ny * Ly + Lz) / len - Lz) * 1.6, 0.5, 1.4) : 1;
+  }
+  // soften cell-to-cell shading so the relief reads as terrain, not a mosaic
+  for (let pass = 0; pass < 2; pass++) {
+    const prev = shade.slice();
+    for (let i = 0; i < N; i++) {
+      if (type[i] !== 0) continue;
+      let s = prev[i] * 2, c = 2;
+      for (let k = nStart[i]; k < nStart[i + 1]; k++) { const n = nbr[k]; if (type[n] === 0) { s += prev[n]; c++; } }
+      shade[i] = s / c;
+    }
+  }
+  return { e, depth, type, mStr, plateau, plateaus, seas, filled, down, order, lakes, lakeId, coastDist: cd, shade, slope };
+}
+
+/* ---------------- stage 2: climate, rivers, biomes ---------------- */
+function genClimate(M, T, P, seed) {
+  const rng = makeRng(seed + "|climate"), nz = makeNoise(rng);
+  const { N, x, y, nStart, nbr } = M, { e, type, down, order } = T;
+  const clim = P.climate / 100, wet = P.moisture / 100;
+  const temp = new Float32Array(N), moist = new Float32Array(N);
+  for (let i = 0; i < N; i++) {
+    const lat = Math.abs(y[i] / H - 0.5) * 2;
+    let t = 30 - 44 * Math.pow(lat, 1.5) + clim * 9 + nz.fbm(x[i] * 0.005, y[i] * 0.005, 3) * 2.5;
+    if (type[i] !== 1) t -= e[i] * 34;
+    temp[i] = t;
+  }
+  // moisture: prevailing winds by latitude band, rain shadow behind mountains
+  for (let i = 0; i < N; i++) {
+    if (type[i] !== 0) { moist[i] = 1; continue; }
+    const lat = Math.abs(y[i] / H - 0.5) * 2, dir = (lat < 0.33 || lat > 0.68) ? 1 : -1;
+    let maxE = e[i], inf = 0, hint = i;
+    for (let k = 1; k <= 14; k++) {
+      const px = x[i] + dir * k * 26;
+      if (px < 0 || px > W) { inf = Math.exp(-k * 26 / 520); break; }
+      const j = M.del.find(px, y[i], hint); hint = j;
+      if (type[j] !== 0) { inf = Math.exp(-k * 26 / 520) * (type[j] === 1 ? 1 : 0.55); break; }
+      if (e[j] > maxE) maxE = e[j];
+    }
+    const shadow = clamp((maxE - e[i]) * 1.8, 0, 0.8);
+    const coast = Math.exp(-T.coastDist[i] * M.s / 260);
+    const band = 0.13 * Math.cos(lat * Math.PI * 3);
+    moist[i] = clamp(0.14 + 0.62 * Math.max(inf * (1 - shadow), coast * 0.75) + band - shadow * 0.25 + nz.fbm(x[i] * 0.006 + 40, y[i] * 0.006, 3) * 0.14 + wet * 0.22, 0, 1);
+  }
+  // flow accumulation
+  const flux = new Float32Array(N);
+  for (let i = 0; i < N; i++) if (type[i] !== 1) flux[i] = 0.15 + moist[i];
+  for (let q = order.length - 1; q >= 0; q--) { const c = order[q], d = down[c]; if (d >= 0 && type[d] !== 1) flux[d] += flux[c]; }
+  const riverT = 2600 / (M.s * M.s);
+  const river = new Uint8Array(N), bestUp = new Int32Array(N).fill(-1), bf = new Float32Array(N);
+  for (let i = 0; i < N; i++) if (type[i] === 0 && flux[i] > riverT) river[i] = 1;
+  for (let i = 0; i < N; i++) { const d = down[i]; if (d >= 0 && type[i] !== 1 && flux[i] > bf[d]) { bf[d] = flux[i]; bestUp[d] = i; } }
+  for (let i = 0; i < N; i++) {
+    if (!river[i]) continue;
+    moist[i] = Math.min(1, moist[i] + 0.1);
+    for (let k = nStart[i]; k < nStart[i + 1]; k++) { const n = nbr[k]; if (type[n] === 0) moist[n] = Math.min(1, moist[n] + 0.05); }
+  }
+  // river geometry, smoothed through cell midpoints
+  const segs = [];
+  for (let i = 0; i < N; i++) {
+    if (!river[i]) continue; const d = down[i]; if (d < 0) continue;
+    const u = bestUp[i], hasUp = u >= 0 && (river[u] || type[u] === 2);
+    const sx = hasUp ? (x[u] + x[i]) / 2 : x[i], sy = hasUp ? (y[u] + y[i]) / 2 : y[i];
+    let ex, ey;
+    if (type[d] !== 0) { ex = x[i] + (x[d] - x[i]) * 0.75; ey = y[i] + (y[d] - y[i]) * 0.75; }
+    else if (bestUp[d] === i) { ex = (x[i] + x[d]) / 2; ey = (y[i] + y[d]) / 2; }
+    else { ex = x[d]; ey = y[d]; }
+    const w = clamp(0.35 + 0.42 * Math.sqrt(flux[i] / riverT), 0.35, 4.2);
+    segs.push([Math.round(w * 4) / 4, sx, sy, x[i], y[i], ex, ey]);
+  }
+  segs.sort((a, b) => a[0] - b[0]);
+  const rs = new Float32Array(segs.length * 7); segs.forEach((s, k) => rs.set(s, k * 7));
+  // biomes and terrain classes
+  const biome = new Uint8Array(N).fill(255), terr = new Uint8Array(N).fill(255);
+  for (let i = 0; i < N; i++) {
+    if (type[i] !== 0) continue;
+    const t = temp[i], m = moist[i], ee = e[i];
+    let b;
+    if (ee > 0.72 || (ee > 0.55 && t < -6)) b = B.peaks;
+    else if (ee > 0.55) b = B.alpine;
+    else if (t < -10) b = B.glacier;
+    else if (t < -1) b = B.tundra;
+    else if (ee < 0.07 && T.slope[i] < 0.003 && m > 0.62 && t > 2) b = (t > 20 && T.coastDist[i] <= 1) ? B.mangrove : B.swamp;
+    else if (t < 6) b = m < 0.28 ? B.coldsteppe : B.boreal;
+    else if (t < 18) b = m < 0.16 ? B.colddesert : m < 0.34 ? ((ee > 0.2 && m < 0.25) ? B.badlands : B.grass) : m < 0.66 ? B.tempforest : B.temprain;
+    else b = m < 0.18 ? (ee > 0.18 ? B.badlands : B.desert) : m < 0.36 ? B.savanna : m < 0.62 ? B.dryforest : B.rainforest;
+    biome[i] = b;
+    terr[i] = (T.plateau[i] && ee < 0.64) ? 4 : ee < 0.2 ? 0 : ee < 0.42 ? 1 : ee < 0.64 ? 2 : 3;
+  }
+  return { temp, moist, flux, river, riverT, bestUp, biome, terr, riverSegs: rs, riverCount: segs.length };
+}
+
+/* ---------------- stage 3: provinces, landmasses, names ---------------- */
+function genRegions(M, T, Cl, P, seed) {
+  const rng = makeRng(seed + "|regions"), nameRng = makeRng(seed + "|names");
+  const { N, x, y, nStart, nbr } = M, { type, e } = T;
+  const land = []; for (let i = 0; i < N; i++) if (type[i] === 0) land.push(i);
+  const L = land.length;
+  // landmasses
+  const lm = new Int32Array(N).fill(-1), masses = [];
+  for (const i of land) {
+    if (lm[i] >= 0) continue;
+    const id = masses.length, cells = [i]; lm[i] = id;
+    for (let q = 0; q < cells.length; q++) { const c = cells[q]; for (let k = nStart[c]; k < nStart[c + 1]; k++) { const n = nbr[k]; if (type[n] === 0 && lm[n] < 0) { lm[n] = id; cells.push(n); } } }
+    let sx = 0, sy = 0; for (const c of cells) { sx += x[c]; sy += y[c]; }
+    masses.push({ id, cells, size: cells.length, cx: sx / cells.length, cy: sy / cells.length });
+  }
+  const bySize = masses.slice().sort((a, b) => b.size - a.size);
+  const contThresh = L * 0.04;
+  bySize.forEach((m, k) => { m.continent = k === 0 || m.size >= contThresh; });
+  const conts = bySize.filter(m => m.continent);
+  conts.forEach((m, k) => { m.lang = makeLanguage(makeRng(seed + "|lang" + k)); });
+  const nearestCont = (px, py) => { let b = conts[0], bd = Infinity; for (const c of conts) { const d = (c.cx - px) ** 2 + (c.cy - py) ** 2; if (d < bd) { bd = d; b = c; } } return b; };
+  const langAt = (px, py) => nearestCont(px, py).lang;
+  const used = new Set();
+  for (const m of bySize) {
+    if (m.continent) { m.name = m.lang.word(nameRng, used); continue; }
+    m.lang = nearestCont(m.cx, m.cy).lang;
+    if (m.size >= 5) { const w = m.lang.word(nameRng, used); m.name = m.size >= L * 0.008 ? w : nameRng.chance(0.5) ? "Isle of " + w : w + " Isle"; }
+    else m.name = "";
+  }
+  // province seeds, spaced apart
+  const target = Math.max(1, Math.min(P.provinces, L)), avg = L / target;
+  const sh = shuffle(rng, land.slice()), seeds = [], taken = new Uint8Array(N);
+  let rmin = 0.85 * Math.sqrt(avg) * M.s;
+  for (let pass = 0; pass < 5 && seeds.length < target; pass++) {
+    const gs = rmin, grid = new Map(), key = (gx, gy) => gx * 100000 + gy;
+    const add = i => { const k = key(Math.floor(x[i] / gs), Math.floor(y[i] / gs)); let a = grid.get(k); if (!a) grid.set(k, a = []); a.push(i); };
+    seeds.forEach(add);
+    for (const i of sh) {
+      if (seeds.length >= target) break; if (taken[i]) continue;
+      const gx = Math.floor(x[i] / gs), gy = Math.floor(y[i] / gs); let ok = true;
+      for (let a = -1; a <= 1 && ok; a++) for (let b = -1; b <= 1 && ok; b++) {
+        const arr = grid.get(key(gx + a, gy + b)); if (!arr) continue;
+        for (const j of arr) if ((x[i] - x[j]) ** 2 + (y[i] - y[j]) ** 2 < rmin * rmin) { ok = false; break; }
+      }
+      if (ok) { seeds.push(i); taken[i] = 1; add(i); }
+    }
+    rmin *= 0.75;
+  }
+  const cost = (a, b) => Math.hypot(x[a] - x[b], y[a] - y[b]) * (1 + Math.abs(e[a] - e[b]) * 45 + (Cl.river[a] !== Cl.river[b] ? 0.6 : 0));
+  const owner = new Int32Array(N).fill(-1);
+  const wts = []; for (let k = 0; k < target * 2 + 200; k++) wts.push(rng.range(0.85, 1.2));
+  function grow(seedList, ids, allow) {
+    const dist = new Float32Array(N).fill(Infinity), hp = new Heap();
+    seedList.forEach((s, k) => { owner[s] = ids[k]; dist[s] = 0; hp.push(s, 0); });
+    while (hp.size) {
+      const c = hp.pop(), dc = hp.lk; if (dc > dist[c]) continue;
+      const w = wts[owner[c]] || 1;
+      for (let k = nStart[c]; k < nStart[c + 1]; k++) {
+        const n = nbr[k]; if (!allow[n]) continue;
+        const nd = dc + cost(c, n) * w;
+        if (nd < dist[n]) { dist[n] = nd; owner[n] = owner[c]; hp.push(n, nd); }
+      }
+    }
+  }
+  const landMask = new Uint8Array(N); for (const i of land) landMask[i] = 1;
+  let ids = seeds.map((_, k) => k);
+  grow(seeds, ids, landMask);
+  // one relaxation pass so provinces come out evenly shaped
+  {
+    const sx = new Float64Array(seeds.length), sy = new Float64Array(seeds.length), cn = new Int32Array(seeds.length);
+    for (const i of land) { const o = owner[i]; if (o >= 0) { sx[o] += x[i]; sy[o] += y[i]; cn[o]++; } }
+    const best = seeds.slice(), bd = new Float64Array(seeds.length).fill(Infinity);
+    for (const i of land) { const o = owner[i]; if (o < 0 || !cn[o]) continue; const d = (x[i] - sx[o] / cn[o]) ** 2 + (y[i] - sy[o] / cn[o]) ** 2; if (d < bd[o]) { bd[o] = d; best[o] = i; } }
+    for (const i of land) owner[i] = -1;
+    grow(best, ids, landMask);
+  }
+  // land that no seed reached (small islands)
+  let nextId = seeds.length;
+  for (const i of land) {
+    if (owner[i] >= 0) continue;
+    const comp = [i], inC = new Set([i]);
+    for (let q = 0; q < comp.length; q++) { const c = comp[q]; for (let k = nStart[c]; k < nStart[c + 1]; k++) { const n = nbr[k]; if (type[n] === 0 && owner[n] < 0 && !inC.has(n)) { inC.add(n); comp.push(n); } } }
+    let attach = -1;
+    if (comp.length < avg * 0.35) {
+      const d = new Map(); const q = comp.slice(); comp.forEach(c => d.set(c, 0));
+      for (let h = 0; h < q.length && attach < 0; h++) {
+        const c = q[h]; if (d.get(c) > 10) break;
+        for (let k = nStart[c]; k < nStart[c + 1]; k++) {
+          const n = nbr[k]; if (d.has(n)) continue; d.set(n, d.get(c) + 1);
+          if (type[n] === 0 && owner[n] >= 0) { attach = owner[n]; break; }
+          q.push(n);
+        }
+      }
+    }
+    if (attach >= 0) { for (const c of comp) owner[c] = attach; continue; }
+    const k = Math.max(1, Math.round(comp.length / avg)), sub = shuffle(rng, comp.slice()).slice(0, k);
+    const allow = new Uint8Array(N); for (const c of comp) allow[c] = 1;
+    grow(sub, sub.map((_, j) => nextId + j), allow);
+    nextId += k;
+  }
+  // compact province ids
+  const remap = new Int32Array(nextId).fill(-1); let np = 0;
+  for (const i of land) { const o = owner[i]; if (remap[o] < 0) remap[o] = np++; owner[i] = remap[o]; }
+  const provCells = Array.from({ length: np }, () => []);
+  for (const i of land) provCells[owner[i]].push(i);
+  // water bodies
+  const waterName = new Int32Array(N).fill(-1), bodies = [];
+  const seaLang = conts[0].lang;
+  const ocean = []; for (let i = 0; i < N; i++) if (type[i] === 1) ocean.push(i);
+  const oc = ocean.slice().sort((a, b) => T.coastDist[b] - T.coastDist[a]), opts = [];
+  for (const i of oc) {
+    if (opts.length >= 4 || T.coastDist[i] < 5) break;
+    if (opts.every(j => Math.hypot(x[i] - x[j], y[i] - y[j]) > 430)) opts.push(i);
+  }
+  if (!opts.length && oc.length) opts.push(oc[0]);
+  opts.forEach((c, k) => {
+    const w = seaLang.word(nameRng, used), big = T.coastDist[c] * M.s > 90;
+    bodies.push({ name: k === 0 ? "The " + w + " Ocean" : big ? w + " Ocean" : w + " Sea", kind: big ? "Ocean" : "Sea", x: x[c], y: y[c], fs: big ? 26 : 18, cells: 0 });
+  });
+  for (const i of ocean) {
+    let b = 0, bd = Infinity;
+    opts.forEach((c, k) => { const d = (x[i] - x[c]) ** 2 + (y[i] - y[c]) ** 2; if (d < bd) { bd = d; b = k; } });
+    waterName[i] = b;
+  }
+  for (const s of T.seas) {
+    const ci = M.del.find(s.x, s.y); if (type[ci] !== 1) continue;
+    const w = langAt(s.x, s.y).word(nameRng, used), idx = bodies.length;
+    bodies.push({ name: nameRng.pick(["Sea of $", "$ Sea", "Gulf of $", "Bay of $"]).replace("$", w), kind: "Sea", x: s.x, y: s.y, fs: clamp(s.r * 0.22, 11, 20), cells: 0 });
+    for (const i of ocean) if (Math.hypot(x[i] - s.x, y[i] - s.y) < s.r * 1.15) waterName[i] = idx;
+  }
+  T.lakes.forEach(lk => {
+    let sx = 0, sy = 0; for (const c of lk.cells) { sx += x[c]; sy += y[c]; }
+    const cx = sx / lk.cells.length, cy = sy / lk.cells.length, w = langAt(cx, cy).word(nameRng, used), big = lk.cells.length * M.cellArea > 3500;
+    const idx = bodies.length;
+    bodies.push({ name: big ? w + " Sea" : "Lake " + w, kind: big ? "Inland sea" : "Lake", x: cx, y: cy, fs: big ? 13 : 8, cells: lk.cells.length, lake: 1 });
+    for (const c of lk.cells) waterName[c] = idx;
+  });
+  // named rivers
+  const riverId = new Int32Array(N).fill(-1), rivers = [];
+  const rcells = land.filter(i => Cl.river[i]).sort((a, b) => Cl.flux[b] - Cl.flux[a]);
+  for (const c of rcells) {
+    if (riverId[c] >= 0 || Cl.flux[c] < Cl.riverT * 2) continue;
+    const id = rivers.length, w = langAt(x[c], y[c]).word(nameRng, used);
+    rivers.push({ name: nameRng.chance(0.5) ? "The " + w : w + " River", len: 0 });
+    let cur = c;
+    while (cur >= 0 && Cl.river[cur] && riverId[cur] < 0) { riverId[cur] = id; rivers[id].len++; cur = Cl.bestUp[cur]; }
+  }
+  // mountain ranges
+  const rangeId = new Int32Array(N).fill(-1), ranges = [], minRange = Math.max(5, Math.round(1500 / M.cellArea));
+  for (const i of land) {
+    if (e[i] <= 0.44 || rangeId[i] >= 0) continue;
+    const cells = [i]; rangeId[i] = -2;
+    for (let q = 0; q < cells.length; q++) { const c = cells[q]; for (let k = nStart[c]; k < nStart[c + 1]; k++) { const n = nbr[k]; if (type[n] === 0 && e[n] > 0.44 && rangeId[n] === -1) { rangeId[n] = -2; cells.push(n); } } }
+    if (cells.length < minRange) { for (const c of cells) rangeId[c] = -3; continue; }
+    const id = ranges.length; let sx = 0, sy = 0, top = 0;
+    for (const c of cells) { rangeId[c] = id; sx += x[c]; sy += y[c]; if (e[c] > top) top = e[c]; }
+    const w = langAt(sx / cells.length, sy / cells.length).word(nameRng, used);
+    const cx = sx / cells.length, cy = sy / cells.length;
+    let lc = cells[0], ld = Infinity; for (const c of cells) { const d = (x[c] - cx) ** 2 + (y[c] - cy) ** 2; if (d < ld) { ld = d; lc = c; } }
+    ranges.push({ name: nameRng.pick(["The $ Mountains", "$ Range", "The $ Peaks", "Spine of $", "$ Mountains"]).replace("$", w), size: cells.length, top, cell: lc });
+  }
+  for (const i of land) if (rangeId[i] < 0) rangeId[i] = -1;
+  // plateau names
+  const plats = T.plateaus.map((p, k) => {
+    const cells = land.filter(i => T.plateau[i] === k + 1);
+    if (cells.length < 6) return null;
+    let sx = 0, sy = 0; for (const c of cells) { sx += x[c]; sy += y[c]; }
+    const cx = sx / cells.length, cy = sy / cells.length, w = langAt(cx, cy).word(nameRng, used);
+    return { name: nameRng.pick(["$ Plateau", "The $ Highlands", "$ Tableland"]).replace("$", w), x: cx, y: cy, size: cells.length };
+  });
+  // province records
+  const ind = innerDist(M, owner), heart = heartCells(owner, ind, np);
+  const provs = [], nb = BIOMES.length;
+  const adjSets = Array.from({ length: np }, () => new Set());
+  for (let ed = 0; ed < M.E; ed++) {
+    const a = M.eA[ed], b = M.eB[ed];
+    if (type[a] === 0 && type[b] === 0 && owner[a] !== owner[b]) { adjSets[owner[a]].add(owner[b]); adjSets[owner[b]].add(owner[a]); }
+  }
+  for (let p = 0; p < np; p++) {
+    const cells = provCells[p], bc = new Int32Array(nb), tc = new Int32Array(5);
+    let se = 0, st = 0, sm = 0, sx = 0, sy = 0, coastal = false, coastBody = -1, lakeShore = -1, volc = false;
+    const rv = new Set(), rg = new Map(), pl = new Map();
+    for (const c of cells) {
+      se += e[c]; st += Cl.temp[c]; sm += Cl.moist[c]; sx += x[c]; sy += y[c];
+      bc[Cl.biome[c]]++; tc[Cl.terr[c]]++;
+      if (riverId[c] >= 0) rv.add(riverId[c]);
+      if (rangeId[c] >= 0) rg.set(rangeId[c], (rg.get(rangeId[c]) || 0) + 1);
+      if (T.plateau[c] && plats[T.plateau[c] - 1]) pl.set(T.plateau[c] - 1, (pl.get(T.plateau[c] - 1) || 0) + 1);
+      for (let k = nStart[c]; k < nStart[c + 1]; k++) {
+        const n = nbr[k];
+        if (type[n] === 1) { coastal = true; if (coastBody < 0) coastBody = waterName[n]; }
+        else if (type[n] === 2 && lakeShore < 0) lakeShore = waterName[n];
+      }
+    }
+    let biome = 0; for (let b = 1; b < nb; b++) if (bc[b] > bc[biome]) biome = b;
+    let terr = 0; for (let t = 1; t < 5; t++) if (tc[t] > tc[terr]) terr = t;
+    const topOf = m => { let b = -1, bv = 0; for (const [k, v] of m) if (v > bv) { bv = v; b = k; } return b; };
+    const n = cells.length, hc = heart[p] >= 0 ? heart[p] : cells[0];
+    const mass = masses[lm[cells[0]]];
+    provs.push({
+      id: p, cells, size: n, cx: sx / n, cy: sy / n, heart: hc, mass: mass.id,
+      e: se / n, temp: st / n, moist: sm / n, biome, terr, coastal, coastBody, lakeShore,
+      rivers: [...rv].sort((a, b) => rivers[b].len - rivers[a].len), range: topOf(rg), plateau: topOf(pl),
+      name: mass.lang.word(nameRng, used), adj: [...adjSets[p]],
+    });
+  }
+  return { owner, provs, masses, cellMass: lm, conts, langAt, waterName, bodies, riverId, rivers, rangeId, ranges, plats, land };
+}
+
+/* ---------------- stage 4: realms ---------------- */
+function genStates(G, P, seed) {
+  const rng = makeRng(seed + "|states"), nameRng = makeRng(seed + "|statenames");
+  const { R, M } = G, provs = R.provs, np = provs.length;
+  const S = Math.max(1, Math.min(P.states, Math.floor(np / 3) || 1));
+  const habitable = p => provs[p].biome !== B.glacier;
+  const avgSp = Math.sqrt(R.land.length * M.cellArea / Math.max(1, np));
+  // sea links between nearby coastal provinces so islands can join realms
+  const seaAdj = Array.from({ length: np }, () => []);
+  {
+    const gs = avgSp * 3.2, grid = new Map(), key = (a, b) => a * 100000 + b;
+    provs.forEach(p => { if (!p.coastal) return; const k = key(Math.floor(p.cx / gs), Math.floor(p.cy / gs)); let a = grid.get(k); if (!a) grid.set(k, a = []); a.push(p.id); });
+    provs.forEach(p => {
+      if (!p.coastal) return;
+      const gx = Math.floor(p.cx / gs), gy = Math.floor(p.cy / gs);
+      for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) {
+        const arr = grid.get(key(gx + a, gy + b)); if (!arr) continue;
+        for (const q of arr) if (q !== p.id && provs[q].mass !== p.mass && Math.hypot(provs[q].cx - p.cx, provs[q].cy - p.cy) < gs) seaAdj[p.id].push(q);
+      }
+    });
+  }
+  // capitals: spread out, avoiding ice
+  const hab = []; for (let p = 0; p < np; p++) if (habitable(p)) hab.push(p);
+  const pool = hab.length ? hab : provs.map(p => p.id);
+  const caps = [rng.pick(pool)];
+  while (caps.length < Math.min(S, pool.length)) {
+    let best = -1, bs = -1;
+    for (let t = 0; t < 15; t++) {
+      const c = rng.pick(pool); if (caps.includes(c)) continue;
+      let md = Infinity; for (const k of caps) md = Math.min(md, Math.hypot(provs[c].cx - provs[k].cx, provs[c].cy - provs[k].cy));
+      md *= rng.range(0.8, 1.2);
+      if (md > bs) { bs = md; best = c; }
+    }
+    if (best < 0) break;
+    caps.push(best);
+  }
+  const vigor = caps.map(() => rng.range(0.75, 1.35));
+  const tc = p => {
+    const b = provs[p].biome;
+    let c = b === B.glacier ? 8 : b === B.peaks ? 4 : b === B.alpine ? 2.5 : (b === B.desert || b === B.colddesert) ? 1.8 : b === B.swamp ? 1.6 : b === B.rainforest ? 1.5 : 1;
+    if (provs[p].terr === 2) c *= 1.6; else if (provs[p].terr === 3) c *= 2.2;
+    return c;
+  };
+  const own = new Int32Array(np).fill(-1), dist = new Float64Array(np).fill(Infinity), hp = new Heap();
+  caps.forEach((c, s) => { own[c] = s; dist[c] = 0; hp.push(c, 0); });
+  while (hp.size) {
+    const c = hp.pop(), dc = hp.lk; if (dc > dist[c]) continue;
+    const s = own[c], pc = provs[c];
+    const relax = (q, extra) => {
+      const nd = dc + (Math.hypot(provs[q].cx - pc.cx, provs[q].cy - pc.cy) * extra + (extra > 1 ? avgSp * 2 : 0)) * tc(q) * vigor[s];
+      if (nd < dist[q]) { dist[q] = nd; own[q] = s; hp.push(q, nd); }
+    };
+    for (const q of pc.adj) relax(q, 1);
+    for (const q of seaAdj[c]) relax(q, 2.2);
+  }
+  for (let p = 0; p < np; p++) {
+    if (own[p] >= 0) continue;
+    let b = -1, bd = Infinity;
+    for (let q = 0; q < np; q++) if (own[q] >= 0) { const d = (provs[q].cx - provs[p].cx) ** 2 + (provs[q].cy - provs[p].cy) ** 2; if (d < bd) { bd = d; b = q; } }
+    own[p] = b >= 0 ? own[b] : 0;
+  }
+  for (let p = 0; p < np; p++) if (provs[p].biome === B.glacier && !caps.includes(p)) own[p] = -1;
+  // realm records
+  const states = caps.map((c, s) => ({ id: s, capital: c, provs: [], cells: 0 }));
+  for (let p = 0; p < np; p++) if (own[p] >= 0) { states[own[p]].provs.push(p); states[own[p]].cells += provs[p].size; }
+  const rank = states.slice().sort((a, b) => b.cells - a.cells);
+  rank.forEach((s, k) => {
+    const lang = R.masses[provs[s.capital].mass].lang, w = lang.word(nameRng, null);
+    let form;
+    if (k < Math.max(1, Math.round(states.length * 0.08))) form = nameRng.pick(["$ Empire", "Empire of $", "High Kingdom of $"]);
+    else if (s.provs.length <= 3) form = nameRng.pick(["Free City of $", "Barony of $", "County of $", "Principality of $"]);
+    else form = weightedPick(nameRng, GOV, g => g[1])[0];
+    s.name = form.replace("$", w); s.short = w;
+  });
+  // colour realms so neighbours differ
+  const sAdj = states.map(() => new Set());
+  for (let p = 0; p < np; p++) { if (own[p] < 0) continue; for (const q of provs[p].adj) if (own[q] >= 0 && own[q] !== own[p]) sAdj[own[p]].add(own[q]); }
+  const useCount = new Int32Array(REALM_COLORS.length), cidx = new Int32Array(states.length).fill(-1);
+  const off = rng.int(0, REALM_COLORS.length - 1);
+  for (const s of rank) {
+    const bad = new Set([...sAdj[s.id]].map(t => cidx[t]));
+    let best = -1;
+    for (let j = 0; j < REALM_COLORS.length; j++) { const c = (j + off) % REALM_COLORS.length; if (bad.has(c)) continue; if (best < 0 || useCount[c] < useCount[best]) best = c; }
+    if (best < 0) best = rng.int(0, REALM_COLORS.length - 1);
+    cidx[s.id] = best; useCount[best]++;
+    const rgb = hexRgb(REALM_COLORS[best]), j = rng.range(0.93, 1.06);
+    s.rgb = rgb.map(v => clamp(v * j, 0, 255));
+  }
+  const cellState = new Int32Array(M.N).fill(-1);
+  for (const i of R.land) cellState[i] = own[R.owner[i]];
+  const heart = heartCells(cellState, innerDist(M, cellState), states.length);
+  states.forEach(s => { s.heart = heart[s.id] >= 0 ? heart[s.id] : provs[s.capital].heart; });
+  return { own, states, cellState };
+}
+
+/* ---------------- stage 5: wilds and wonders ---------------- */
+function genFeatures(G, P, seed) {
+  const rng = makeRng(seed + "|wonders"), nameRng = makeRng(seed + "|wondernames");
+  const { R, S, T, M } = G, provs = R.provs, np = provs.length, wl = P.wildlife / 100, mg = P.magic / 100;
+  const langOf = p => R.masses[provs[p].mass].lang;
+  const hostile = new Int32Array(np).fill(-1), titan = new Int32Array(np).fill(-1), special = new Uint8Array(np), mystery = new Int32Array(np).fill(-1);
+  const growRegion = (start, size, ok, mark) => {
+    const reg = [start]; mark(start); const front = [...provs[start].adj];
+    while (reg.length < size && front.length) {
+      const q = front.splice(rng.int(0, front.length - 1), 1)[0];
+      if (!ok(q) || reg.includes(q)) continue;
+      reg.push(q); mark(q); for (const r of provs[q].adj) front.push(r);
+    }
+    return reg;
+  };
+  // hostile wildlife
+  const hostRegions = [];
+  const nH = Math.round(np * wl / 40);
+  for (let k = 0; k < nH; k++) {
+    const free = provs.filter(p => hostile[p.id] < 0);
+    const s = weightedPick(rng, free, p => WILD_WEIGHT[BIOMES[p.biome].k] || 1); if (!s) break;
+    const tierR = rng.f() + wl * 0.4, tier = tierR < 0.55 ? 1 : tierR < 0.95 ? 2 : 3;
+    const id = hostRegions.length, bk = BIOMES[s.biome].k;
+    const reg = growRegion(s.id, rng.int(2, 8), q => hostile[q] < 0, q => { hostile[q] = id; });
+    hostRegions.push({ tier, creature: rng.pick(WILD[bk]), provs: reg });
+  }
+  // titan domains, placed far from realm capitals
+  const titans = [];
+  const nT = wl <= 0 ? 0 : clamp(Math.round(np / 320 * wl * 2), 1, 14);
+  if (nT) {
+    const hop = new Int32Array(np).fill(-1), q = [];
+    S.states.forEach(s => { hop[s.capital] = 0; q.push(s.capital); });
+    for (let h = 0; h < q.length; h++) for (const r of provs[q[h]].adj) if (hop[r] < 0) { hop[r] = hop[q[h]] + 1; q.push(r); }
+    const order = provs.map(p => p.id).sort((a, b) => (hop[b] < 0 ? 999 : hop[b]) - (hop[a] < 0 ? 999 : hop[a]));
+    const top = order.slice(0, Math.max(nT * 3, Math.round(np * 0.3)));
+    const seeds = [];
+    for (let t = 0; t < 400 && seeds.length < nT; t++) {
+      const c = rng.pick(top); if (titan[c] >= 0 || provs[c].size < 2) continue;
+      if (seeds.some(s => Math.hypot(provs[s].cx - provs[c].cx, provs[s].cy - provs[c].cy) < 180)) continue;
+      seeds.push(c);
+      const id = titans.length, reg = [c]; titan[c] = id;
+      const size = rng.int(8, 22);
+      for (let h = 0; h < reg.length && reg.length < size; h++) {
+        for (const r of shuffle(rng, provs[reg[h]].adj.slice())) { if (reg.length >= size) break; if (titan[r] < 0) { titan[r] = id; reg.push(r); } }
+      }
+      const kind = rng.pick(titanKinds(BIOMES[provs[c].biome].k));
+      titans.push({ name: langOf(c).word(nameRng, null) + ", the " + kind, kind, provs: reg });
+    }
+  }
+  // strange forests
+  const nS = Math.round(np * mg / 120);
+  for (let k = 0; k < nS; k++) {
+    const t = rng.int(1, 4), fits = SPECIAL[t].fits;
+    const cand = provs.filter(p => !special[p.id] && fits.includes(p.biome)); if (!cand.length) continue;
+    growRegion(rng.pick(cand).id, rng.int(3, 12), q => !special[q] && fits.includes(provs[q].biome), q => { special[q] = t; });
+  }
+  // mystery sites
+  const sites = [], nM = Math.round(np * mg / 22);
+  for (let k = 0, tries = 0; k < nM && tries < nM * 5; tries++) {
+    const p = provs[rng.int(0, np - 1)]; if (mystery[p.id] >= 0) continue;
+    const ok = MYST.filter(m => m.ok(p)), m = rng.pick(ok);
+    mystery[p.id] = sites.length;
+    sites.push({ type: m.n, d: m.d, name: m.n + " of " + langOf(p.id).word(nameRng, null), prov: p.id, cell: p.heart });
+    k++;
+  }
+  // volcanoes on the highest collision peaks
+  const volcanoes = [], nV = Math.round(np / 140) + 1;
+  const vc = [];
+  for (const i of R.land) {
+    if (T.mStr[i] < 0.3 || T.e[i] < 0.45) continue;
+    let top = true; for (let k = M.nStart[i]; k < M.nStart[i + 1]; k++) if (T.e[M.nbr[k]] > T.e[i]) { top = false; break; }
+    if (top) vc.push(i);
+  }
+  vc.sort((a, b) => T.e[b] - T.e[a]);
+  const volcProv = new Int32Array(np).fill(-1);
+  for (const i of vc) {
+    if (volcanoes.length >= nV) break;
+    if (volcanoes.some(v => Math.hypot(M.x[v.cell] - M.x[i], M.y[v.cell] - M.y[i]) < 70)) continue;
+    const p = R.owner[i];
+    volcProv[p] = volcanoes.length;
+    volcanoes.push({ cell: i, prov: p, name: "Mount " + langOf(p).word(nameRng, null) });
+  }
+  // per-cell layers for drawing
+  const N = M.N, cHost = new Uint8Array(N), cTitan = new Int32Array(N).fill(-1), cSpecial = new Uint8Array(N);
+  for (const i of R.land) {
+    const p = R.owner[i];
+    if (hostile[p] >= 0) cHost[i] = hostRegions[hostile[p]].tier;
+    cTitan[i] = titan[p]; cSpecial[i] = special[p];
+  }
+  const tHeart = heartCells(cTitan, innerDist(M, cTitan), titans.length);
+  titans.forEach((t, k) => { t.heart = tHeart[k]; });
+  return { hostile, hostRegions, titan, titans, special, mystery, sites, volcanoes, volcProv, cHost, cTitan, cSpecial };
+}
+
+/* ---------------- colour ---------------- */
+function hexRgb(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
+const mixRgb = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+const packRgb = c => ((clamp(c[0], 0, 255) & 0xFC) << 16) | ((clamp(c[1], 0, 255) & 0xFC) << 8) | (clamp(c[2], 0, 255) & 0xFC);
+const hexCache = new Map();
+const hexOf = k => { let s = hexCache.get(k); if (!s) { s = "#" + (k | 0x1000000).toString(16).slice(1); hexCache.set(k, s); } return s; };
+const BRGB = BIOMES.map(b => hexRgb(b.c)), SRGB = SPECIAL.map(s => s ? hexRgb(s.c) : null);
+const HYPSO = [[0, "#4d7f4f"], [0.12, "#86a861"], [0.28, "#d3cb87"], [0.45, "#bf935d"], [0.62, "#8e6b52"], [0.8, "#b9aea4"], [1, "#ffffff"]].map(([t, c]) => [t, hexRgb(c)]);
+const ramp = (stops, t) => { for (let i = 1; i < stops.length; i++) if (t <= stops[i][0]) return mixRgb(stops[i - 1][1], stops[i][1], (t - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0])); return stops[stops.length - 1][1]; };
+const MODE_BG = { terrain: "#1c3a50", political: "#6d8e9f", biome: "#7c9cab", height: "#14304a" };
+const RIVER_COL = { terrain: "#3d78a3", political: "#5a8fb4", biome: "#4f86ad", height: "#4a86b4" };
+
+/* ---------------- app state ---------------- */
+const CONTROLS = [
+  { g: "Scale", id: "provinces", label: "Provinces", min: 500, max: 5000, step: 100, val: 1500, stage: 0, f: v => fmt(v) },
+  { g: "Scale", id: "continents", label: "Continents", min: 1, max: 8, step: 1, val: 3, stage: 1 },
+  { g: "Scale", id: "states", label: "Realms", min: 3, max: 150, step: 1, val: 28, stage: 4 },
+  { g: "Scale", id: "land", label: "Land coverage", min: 20, max: 65, step: 1, val: 38, stage: 0, f: v => v + "%" },
+  { g: "Coastline", id: "peninsulas", label: "Peninsulas per continent", min: 0, max: 5, step: 1, val: 2, stage: 1 },
+  { g: "Coastline", id: "islands", label: "Islands & archipelagos", min: 0, max: 100, step: 5, val: 40, stage: 1, f: v => v + "%" },
+  { g: "Coastline", id: "seas", label: "Inland seas & gulfs", min: 0, max: 8, step: 1, val: 3, stage: 1 },
+  { g: "Terrain & climate", id: "mountains", label: "Mountain building", min: 0, max: 100, step: 5, val: 60, stage: 1, f: v => v + "%" },
+  { g: "Terrain & climate", id: "plateaus", label: "Plateaus", min: 0, max: 6, step: 1, val: 2, stage: 1 },
+  { g: "Terrain & climate", id: "climate", label: "Global temperature", min: -100, max: 100, step: 5, val: 0, stage: 2, f: v => (v >= 0 ? "+" : "−") + Math.abs(v * 0.09).toFixed(1) + " °C", ends: ["Ice age", "Hothouse"] },
+  { g: "Terrain & climate", id: "moisture", label: "Rainfall", min: -100, max: 100, step: 5, val: 0, stage: 2, f: v => (v >= 0 ? "+" : "−") + Math.abs(v) + "%", ends: ["Arid", "Drenched"] },
+  { g: "Wilds & wonders", id: "wildlife", label: "Wildlife danger", min: 0, max: 100, step: 5, val: 50, stage: 5, f: v => v + "%" },
+  { g: "Wilds & wonders", id: "magic", label: "Mysteries & strange lands", min: 0, max: 100, step: 5, val: 50, stage: 5, f: v => v + "%" },
+];
+const params = {};
+let world = null, genSeq = 0, pendingStage = Infinity, debounce = 0;
+const ui = { mode: "terrain", layers: { rivers: true, provinces: true, labels: true, wildlife: true, titans: true, mysteries: true }, sel: null };
+const $ = s => document.querySelector(s);
+const canvas = $("#map"), ctx = canvas.getContext("2d"), statusEl = $("#status"), insp = $("#inspector"), tip = $("#tip");
+let cw = 0, ch = 0, dpr = 1;
+const view = { k: 1, ox: 0, oy: 0 }; let fitK = 1;
+const CS = 2, cache = document.createElement("canvas"); cache.width = W * CS; cache.height = H * CS;
+const cctx = cache.getContext("2d");
+
+function buildControls() {
+  const host = $("#controls"); let cur = null, sec = null;
+  for (const c of CONTROLS) {
+    if (c.g !== cur) { cur = c.g; sec = document.createElement("section"); sec.className = "group"; sec.innerHTML = `<h2>${c.g}</h2>`; host.appendChild(sec); }
+    const d = document.createElement("div"); d.className = "ctl";
+    d.innerHTML = `<label for="c-${c.id}">${c.label}</label><output id="o-${c.id}"></output><input type="range" id="c-${c.id}" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.val}">` +
+      (c.ends ? `<div class="ends"><span>${c.ends[0]}</span><span>${c.ends[1]}</span></div>` : "");
+    sec.appendChild(d);
+    const inp = d.querySelector("input"), out = d.querySelector("output");
+    const show = () => { params[c.id] = +inp.value; out.textContent = c.f ? c.f(+inp.value) : inp.value; };
+    show();
+    inp.addEventListener("input", show);
+    inp.addEventListener("change", () => { show(); queueGen(c.stage); });
+  }
+}
+function queueGen(stage) {
+  pendingStage = Math.min(pendingStage, stage);
+  clearTimeout(debounce);
+  debounce = setTimeout(() => { const s = pendingStage; pendingStage = Infinity; generate(s); }, 180);
+}
+const SEED_WORDS = ["alder", "ember", "hollow", "saltmere", "thorn", "gloam", "mirewood", "ashen", "tidefall", "ravel", "cinder", "frostholm", "duskmoor", "brine", "wyrmrest", "oakshade", "stormreach", "lanthorn"];
+function randomSeed() { return SEED_WORDS[Math.floor(Math.random() * SEED_WORDS.length)] + "-" + Math.floor(Math.random() * 900 + 100); }
+
+async function generate(from = 0) {
+  const my = ++genSeq, P = { ...params, seed: $("#seed").value.trim() || "worldforge" }, seed = P.seed;
+  const step = async msg => { statusEl.textContent = msg; statusEl.hidden = false; await tick(); if (my !== genSeq) throw "cancel"; };
+  try {
+    let G;
+    if (from > 0 && world && world.seed === seed && world.P.provinces === P.provinces && world.P.land === P.land) G = { ...world, P };
+    else { from = 0; G = { seed, P }; }
+    if (from <= 0) { await step("Scattering the land grid…"); G.M = buildMesh(clamp(Math.round(P.provinces * 5.2 / Math.max(0.3, P.land / 100)), 14000, 80000), makeRng(seed + "|mesh")); }
+    if (from <= 1) { await step("Raising continents and colliding plates…"); G.T = genTerrain(G.M, P, seed); }
+    if (from <= 2) { await step("Turning the winds and carving rivers…"); G.C = genClimate(G.M, G.T, P, seed); }
+    if (from <= 3) { await step("Surveying provinces and naming the land…"); G.R = genRegions(G.M, G.T, G.C, P, seed); }
+    if (from <= 4) { await step("Drawing the borders of realms…"); G.S = genStates(G, P, seed); }
+    if (from <= 5) { await step("Releasing the beasts…"); G.F = genFeatures(G, P, seed); }
+    await step("Inking the map…");
+    G.worldKm = Math.round(Math.sqrt(P.provinces) * 230);
+    world = G; ui.sel = null; insp.hidden = true;
+    computeEdges(); computeColors(); updateStats(); buildLegend();
+    if (from === 0) fitView(); else { buildCache(); drawCrisp(); }
+    statusEl.hidden = true;
+  } catch (err) {
+    if (err !== "cancel") { console.error(err); statusEl.textContent = "Generation failed: " + (err && err.message || err); statusEl.hidden = false; }
+  }
+}
+
+/* ---------------- render prep ---------------- */
+function computeColors() {
+  const G = world, { M, T, C, S, F } = G, N = M.N, mode = ui.mode, cols = new Int32Array(N);
+  const shallow = hexRgb("#8fbccd"), deep = hexRgb("#234c68"), lakeT = hexRgb("#79aecb");
+  const pOcean = [hexRgb("#b8d2dd"), hexRgb("#8fb3c5")], unclaimed = hexRgb("#d4cfc2");
+  const hOcean = [hexRgb("#b9d9e6"), hexRgb("#16344f")];
+  const specialOn = ui.layers.mysteries;
+  for (let i = 0; i < N; i++) {
+    const ty = T.type[i]; let c;
+    if (ty === 1) {
+      const t = Math.max(Math.pow(clamp(T.coastDist[i] * M.s / 180, 0, 1), 0.7), T.depth[i] * 0.8);
+      if (mode === "terrain") c = mixRgb(shallow, deep, t);
+      else if (mode === "political") c = mixRgb(pOcean[0], pOcean[1], t);
+      else if (mode === "biome") c = [168, 198, 211];
+      else c = mixRgb(hOcean[0], hOcean[1], Math.pow(T.depth[i], 0.8));
+    } else if (ty === 2) {
+      c = mode === "terrain" ? lakeT : mode === "political" ? [156, 194, 212] : mode === "biome" ? [143, 188, 208] : [106, 160, 191];
+    } else {
+      const sp = specialOn ? F.cSpecial[i] : 0;
+      const base = sp ? SRGB[sp] : BRGB[C.biome[i]], sh = T.shade[i];
+      if (mode === "terrain") {
+        let b = base;
+        const ee = T.e[i];
+        if (ee > 0.45 && C.biome[i] !== B.peaks && !sp) b = mixRgb(b, [139, 127, 110], clamp((ee - 0.45) * 1.6, 0, 0.6));
+        c = b.map(v => v * sh);
+      } else if (mode === "political") {
+        const st = S.cellState[i], sc = st >= 0 ? S.states[st].rgb : unclaimed;
+        c = mixRgb(sc, base, 0.14).map(v => v * (1 + (sh - 1) * 0.45));
+      } else if (mode === "biome") c = base;
+      else c = ramp(HYPSO, T.e[i]).map(v => v * (1 + (sh - 1) * 0.7));
+    }
+    cols[i] = packRgb(c);
+  }
+  const order = new Int32Array(N); for (let i = 0; i < N; i++) order[i] = i;
+  order.sort((a, b) => cols[a] - cols[b]);
+  G.cols = cols; G.colOrder = order;
+  buildCache();
+}
+function computeEdges() {
+  const G = world, { M, T, R, S, F } = G, coast = [], prov = [], state = [], host = [], tit = [];
+  for (let e = 0; e < M.E; e++) {
+    const a = M.eA[e], b = M.eB[e], la = T.type[a] === 0, lb = T.type[b] === 0;
+    if (la !== lb) coast.push(e);
+    else if (la && lb) {
+      if (S.cellState[a] !== S.cellState[b]) state.push(e);
+      else if (R.owner[a] !== R.owner[b]) prov.push(e);
+    }
+    if (F.cHost[a] !== F.cHost[b]) host.push(e);
+    if (F.cTitan[a] !== F.cTitan[b] && (F.cTitan[a] >= 0 || F.cTitan[b] >= 0)) tit.push(e);
+  }
+  G.edges = { coast: Int32Array.from(coast), prov: Int32Array.from(prov), state: Int32Array.from(state), host: Int32Array.from(host), tit: Int32Array.from(tit) };
+}
+
+/* ---------------- drawing ---------------- */
+const patterns = {};
+function hatchPattern(key, color, sp, lw, cross) {
+  if (patterns[key]) return patterns[key];
+  const c = document.createElement("canvas"); c.width = c.height = sp;
+  const g = c.getContext("2d"); g.strokeStyle = color; g.lineWidth = lw; g.lineCap = "square";
+  g.beginPath();
+  g.moveTo(0, sp); g.lineTo(sp, 0); g.moveTo(-sp / 2, sp / 2); g.lineTo(sp / 2, -sp / 2); g.moveTo(sp / 2, sp * 1.5); g.lineTo(sp * 1.5, sp / 2);
+  if (cross) { g.moveTo(0, 0); g.lineTo(sp, sp); g.moveTo(-sp / 2, sp / 2); g.lineTo(sp / 2, sp * 1.5); g.moveTo(sp / 2, -sp / 2); g.lineTo(sp * 1.5, sp / 2); }
+  g.stroke();
+  return patterns[key] = ctx.createPattern(c, "repeat");
+}
+function drawMap(g, cwid, chei, pr, v, o) {
+  const G = world; if (!G) return;
+  const { M, T, C, R, S, F } = G, { k, ox, oy } = v, X = M.x, Y = M.y, ps = M.polyStart, pxy = M.polyXY;
+  g.setTransform(pr, 0, 0, pr, 0, 0);
+  g.fillStyle = MODE_BG[ui.mode]; g.fillRect(0, 0, cwid, chei);
+  g.setTransform(pr * k, 0, 0, pr * k, pr * ox, pr * oy);
+  const pad = M.s * 3, vx0 = -ox / k - pad, vy0 = -oy / k - pad, vx1 = (cwid - ox) / k + pad, vy1 = (chei - oy) / k + pad;
+  const inV = (px, py) => px > vx0 && px < vx1 && py > vy0 && py < vy1;
+  const poly = i => { const a = ps[i], b = ps[i + 1]; if (b - a < 3) return; g.moveTo(pxy[2 * a], pxy[2 * a + 1]); for (let j = a + 1; j < b; j++) g.lineTo(pxy[2 * j], pxy[2 * j + 1]); g.closePath(); };
+  // cells, batched by colour
+  g.lineWidth = 1.1 / k; g.lineJoin = "round";
+  const cols = G.cols, ord = G.colOrder; let cur = -1;
+  const flush = () => { if (cur !== -1) { const s = hexOf(cur); g.fillStyle = s; g.strokeStyle = s; g.fill(); g.stroke(); } };
+  g.beginPath();
+  for (let n = 0; n < ord.length; n++) {
+    const i = ord[n]; if (!inV(X[i], Y[i])) continue;
+    const c = cols[i]; if (c !== cur) { flush(); g.beginPath(); cur = c; }
+    poly(i);
+  }
+  flush();
+  const edges = (list, color, px, dash) => {
+    g.strokeStyle = color; g.lineWidth = px / k; g.setLineDash(dash ? dash.map(d => d / k) : []);
+    g.beginPath();
+    const XY = M.eXY;
+    for (let n = 0; n < list.length; n++) {
+      const e = list[n], x1 = XY[4 * e], y1 = XY[4 * e + 1], x2 = XY[4 * e + 2], y2 = XY[4 * e + 3];
+      if (!inV((x1 + x2) / 2, (y1 + y2) / 2)) continue;
+      g.moveTo(x1, y1); g.lineTo(x2, y2);
+    }
+    g.stroke(); g.setLineDash([]);
+  };
+  g.lineCap = "round";
+  // rivers
+  if (ui.layers.rivers) {
+    const rs = C.riverSegs, n = C.riverCount; g.strokeStyle = RIVER_COL[ui.mode]; let cw2 = -1;
+    g.beginPath();
+    for (let q = 0; q < n; q++) {
+      const o7 = q * 7, lw = Math.max(rs[o7], 0.85 / k);
+      if (!inV(rs[o7 + 3], rs[o7 + 4])) continue;
+      if (lw !== cw2) { if (cw2 > 0) g.stroke(); g.beginPath(); g.lineWidth = lw; cw2 = lw; }
+      g.moveTo(rs[o7 + 1], rs[o7 + 2]); g.quadraticCurveTo(rs[o7 + 3], rs[o7 + 4], rs[o7 + 5], rs[o7 + 6]);
+    }
+    g.stroke();
+  }
+  // borders
+  const pol = ui.mode === "political";
+  if (ui.layers.provinces) edges(G.edges.prov, pol ? "rgba(60,45,30,.32)" : "rgba(40,30,20,.22)", 0.7);
+  edges(G.edges.state, pol ? "rgba(45,30,20,.85)" : "rgba(70,30,30,.55)", pol ? 1.7 : 1.1, pol ? null : [4, 3]);
+  edges(G.edges.coast, ui.mode === "terrain" ? "rgba(28,44,52,.75)" : "rgba(40,55,62,.7)", 1.1);
+  // wildlife and titan overlays
+  if (ui.layers.wildlife) {
+    for (let t = 1; t <= 3; t++) {
+      const pat = hatchPattern("h" + t, HOSTILE_COL[t], 7, t === 3 ? 1.8 : 1.3, false);
+      pat.setTransform(new DOMMatrix().scaleSelf(1 / k, 1 / k));
+      g.globalAlpha = 0.75; g.fillStyle = pat; g.beginPath();
+      for (const i of R.land) if (F.cHost[i] === t && inV(X[i], Y[i])) poly(i);
+      g.fill(); g.globalAlpha = 1;
+    }
+    edges(G.edges.host, "rgba(140,30,20,.8)", 1.2);
+  }
+  if (ui.layers.titans && F.titans.length) {
+    const pat = hatchPattern("titan", "#6b2f86", 9, 1.2, true);
+    pat.setTransform(new DOMMatrix().scaleSelf(1 / k, 1 / k));
+    g.globalAlpha = 0.6; g.fillStyle = pat; g.beginPath();
+    for (const i of R.land) if (F.cTitan[i] >= 0 && inV(X[i], Y[i])) poly(i);
+    g.fill(); g.globalAlpha = 1;
+    edges(G.edges.tit, "rgba(95,35,125,.95)", 2, [7, 4]);
+  }
+  if (o.fast) return;
+  // selection
+  if (ui.sel && ui.sel.edges) { edges(ui.sel.edges, "rgba(255,246,220,.95)", 4.5); edges(ui.sel.edges, "#2b1d0a", 1.6); }
+  if (ui.layers.labels) drawLabels(g, v, cwid, chei, inV);
+  // point markers in screen space
+  g.setTransform(pr, 0, 0, pr, 0, 0);
+  const sx = i => X[i] * k + ox, sy = i => Y[i] * k + oy;
+  for (const vo of F.volcanoes) {
+    const px = sx(vo.cell), py = sy(vo.cell); if (px < -10 || py < -10 || px > cwid + 10 || py > chei + 10) continue;
+    g.beginPath(); g.moveTo(px, py - 7); g.lineTo(px + 7, py + 5); g.lineTo(px - 7, py + 5); g.closePath();
+    g.fillStyle = "#5a3326"; g.strokeStyle = "rgba(255,240,220,.9)"; g.lineWidth = 1.5; g.stroke(); g.fill();
+    g.beginPath(); g.arc(px, py - 7, 2.6, 0, Math.PI * 2); g.fillStyle = "#f06a2a"; g.fill();
+  }
+  if (ui.layers.mysteries) {
+    const showNames = k / fitK > 3.2;
+    g.font = '600 12px "Alegreya Sans", system-ui, sans-serif'; g.textAlign = "left"; g.textBaseline = "middle";
+    for (const s of F.sites) {
+      const px = sx(s.cell), py = sy(s.cell); if (px < -10 || py < -10 || px > cwid + 10 || py > chei + 10) continue;
+      g.beginPath(); g.moveTo(px, py - 7); g.lineTo(px + 5, py); g.lineTo(px, py + 7); g.lineTo(px - 5, py); g.closePath();
+      g.fillStyle = "#f2c75a"; g.strokeStyle = "#3b2a10"; g.lineWidth = 1.4; g.fill(); g.stroke();
+      if (showNames) { g.lineWidth = 3; g.strokeStyle = "rgba(255,250,238,.85)"; g.strokeText(s.type, px + 9, py); g.fillStyle = "#4a3208"; g.fillText(s.type, px + 9, py); }
+    }
+  }
+  drawScaleBar(g, cwid, chei, k);
+  // neatline around the world
+  g.strokeStyle = "rgba(0,0,0,.45)"; g.lineWidth = 1; g.strokeRect(ox, oy, W * k, H * k);
+}
+function label(g, text, x, y, fs, font, fill, halo, spacing, k) {
+  const scr = fs * k; if (scr < 7.5 || scr > 150) return;
+  g.font = font(fs);
+  if ("letterSpacing" in g) g.letterSpacing = (spacing ? fs * spacing : 0) + "px";
+  if (halo) { g.lineWidth = fs * 0.2; g.strokeStyle = halo; g.strokeText(text, x, y); }
+  g.fillStyle = fill; g.fillText(text, x, y);
+}
+const F_SC = fs => `${fs}px "IM Fell English SC", Georgia, serif`;
+const F_IT = fs => `italic ${fs}px "IM Fell English", Georgia, serif`;
+function drawLabels(g, v, cwid, chei, inV) {
+  const G = world, { M, R, S, F } = G, k = v.k, X = M.x, Y = M.y, mode = ui.mode;
+  g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
+  for (const b of R.bodies) {
+    if (!inV(b.x, b.y)) continue;
+    if (b.lake && b.cells * M.cellArea < 900) continue;
+    label(g, b.name, b.x, b.y, b.fs, F_IT, mode === "height" ? "rgba(220,235,245,.7)" : "rgba(28,52,70,.6)", null, 0.12, k);
+  }
+  if (mode === "terrain" || mode === "height") {
+    for (const r of R.ranges) {
+      const c = r.cell; if (!inV(X[c], Y[c])) continue;
+      label(g, r.name, X[c], Y[c], clamp(Math.sqrt(r.size * M.cellArea) * 0.09, 6, 16), F_IT, "rgba(60,40,25,.85)", "rgba(245,238,225,.55)", 0.05, k);
+    }
+    for (const p of R.plats) if (p && inV(p.x, p.y)) label(g, p.name, p.x, p.y, clamp(Math.sqrt(p.size * M.cellArea) * 0.1, 6, 13), F_IT, "rgba(70,50,30,.85)", "rgba(245,238,225,.55)", 0.05, k);
+    for (const m of R.masses) {
+      if (!m.continent) continue;
+      const fs = clamp(Math.sqrt(m.size * M.cellArea) * 0.075, 16, 46);
+      label(g, m.name.toUpperCase(), m.cx, m.cy, fs, F_SC, "rgba(40,28,18,.5)", null, 0.35, k);
+    }
+  }
+  if (mode === "political" || mode === "biome") {
+    for (const s of S.states) {
+      const c = s.heart; if (c < 0 || !inV(X[c], Y[c])) continue;
+      const A = s.cells * M.cellArea, fs = clamp(Math.min(Math.sqrt(A) * 0.13, 1.8 * Math.sqrt(A) / Math.max(4, s.name.length)), 4, 40);
+      label(g, s.name, X[c], Y[c], fs, F_SC, "rgba(30,20,12,.88)", "rgba(255,250,240,.5)", 0.04, k);
+    }
+    if (mode === "political") {
+      for (const p of R.provs) {
+        const c = p.heart; if (!inV(X[c], Y[c])) continue;
+        const fs = clamp(Math.sqrt(p.size * M.cellArea) * 0.17, 1, 20); if (fs * k < 10) continue;
+        if (S.states[S.own[p.id]] && S.states[S.own[p.id]].heart === c) continue;
+        label(g, p.name, X[c], Y[c] + fs * 0.1, fs, F_IT, "rgba(40,30,20,.75)", null, 0, k);
+      }
+    }
+  }
+  if (ui.layers.titans) for (const t of F.titans) {
+    const c = t.heart; if (c < 0 || !inV(X[c], Y[c])) continue;
+    label(g, t.name, X[c], Y[c], 9, F_IT, "#4a1a60", "rgba(250,240,255,.7)", 0.03, k);
+  }
+}
+function drawScaleBar(g, cwid, chei, k) {
+  const kmPx = world.worldKm / W, target = 120 * kmPx / k;
+  const nice = [10, 20, 25, 50, 100, 200, 250, 500, 1000, 2000, 2500, 5000];
+  let km = nice[0]; for (const n of nice) if (n <= target) km = n;
+  const len = km / kmPx * k, x0 = cwid - len - 18, y0 = chei - 20;
+  g.fillStyle = "rgba(250,247,240,.9)"; g.fillRect(x0 - 8, y0 - 22, len + 16, 32);
+  for (let i = 0; i < 4; i++) { g.fillStyle = i % 2 ? "#f4efe3" : "#2a2118"; g.fillRect(x0 + len * i / 4, y0, len / 4, 5); }
+  g.strokeStyle = "#2a2118"; g.lineWidth = 1; g.strokeRect(x0, y0, len, 5);
+  g.fillStyle = "#2a2118"; g.font = '500 11.5px "IBM Plex Mono", ui-monospace, monospace'; g.textAlign = "right"; g.textBaseline = "alphabetic";
+  if ("letterSpacing" in g) g.letterSpacing = "0px";
+  g.fillText(fmt(km) + " km", x0 + len, y0 - 7);
+  g.textAlign = "left"; g.fillText("0", x0, y0 - 7);
+}
+function buildCache() {
+  if (!world) return;
+  drawMap(cctx, W * CS, H * CS, 1, { k: CS, ox: 0, oy: 0 }, { fast: true });
+}
+let crispTimer = 0, rafId = 0;
+function drawCrisp() { if (!world || !cw) return; drawMap(ctx, cw, ch, dpr, view, {}); }
+function drawFast() {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = MODE_BG[ui.mode]; ctx.fillRect(0, 0, cw, ch);
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(cache, view.ox, view.oy, W * view.k, H * view.k);
+}
+function interactFrame() {
+  if (!rafId) rafId = requestAnimationFrame(() => { rafId = 0; drawFast(); });
+  clearTimeout(crispTimer); crispTimer = setTimeout(drawCrisp, 170);
+}
+
+/* ---------------- view + input ---------------- */
+function resize() {
+  const r = canvas.getBoundingClientRect(); dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const first = !cw; cw = r.width; ch = r.height;
+  canvas.width = Math.round(cw * dpr); canvas.height = Math.round(ch * dpr);
+  if (first) fitView(); else { fitK = Math.min(cw / W, ch / H); drawCrisp(); }
+}
+function fitView() {
+  fitK = Math.min(cw / W, ch / H) * 0.98;
+  view.k = fitK; view.ox = (cw - W * fitK) / 2; view.oy = (ch - H * fitK) / 2;
+  drawCrisp();
+}
+function zoomAt(mx, my, f) {
+  const nk = clamp(view.k * f, fitK * 0.7, fitK * 60), wx = (mx - view.ox) / view.k, wy = (my - view.oy) / view.k;
+  view.k = nk; view.ox = mx - wx * nk; view.oy = my - wy * nk;
+  interactFrame();
+}
+const pointers = new Map(); let drag = null, pinch = null, moved = 0, lastFind = 0;
+canvas.addEventListener("pointerdown", ev => {
+  canvas.setPointerCapture(ev.pointerId);
+  pointers.set(ev.pointerId, { x: ev.offsetX, y: ev.offsetY });
+  if (pointers.size === 1) { drag = { x: ev.offsetX, y: ev.offsetY, ox: view.ox, oy: view.oy }; moved = 0; canvas.classList.add("dragging"); }
+  if (pointers.size === 2) {
+    const [a, b] = [...pointers.values()];
+    pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), k: view.k, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2, ox: view.ox, oy: view.oy }; moved = 99;
+  }
+});
+canvas.addEventListener("pointermove", ev => {
+  if (!pointers.has(ev.pointerId)) { if (ev.pointerType === "mouse") hover(ev.offsetX, ev.offsetY); return; }
+  pointers.set(ev.pointerId, { x: ev.offsetX, y: ev.offsetY });
+  if (pointers.size === 2 && pinch) {
+    const [a, b] = [...pointers.values()], d = Math.hypot(a.x - b.x, a.y - b.y), cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2;
+    const nk = clamp(pinch.k * d / pinch.d, fitK * 0.7, fitK * 60), wx = (pinch.cx - pinch.ox) / pinch.k, wy = (pinch.cy - pinch.oy) / pinch.k;
+    view.k = nk; view.ox = cx - wx * nk; view.oy = cy - wy * nk; interactFrame();
+  } else if (drag) {
+    const dx = ev.offsetX - drag.x, dy = ev.offsetY - drag.y; moved = Math.max(moved, Math.abs(dx) + Math.abs(dy));
+    if (moved > 4) { view.ox = drag.ox + dx; view.oy = drag.oy + dy; interactFrame(); tip.hidden = true; }
+  }
+});
+const endPointer = ev => {
+  if (!pointers.has(ev.pointerId)) return;
+  const wasSingle = pointers.size === 1;
+  pointers.delete(ev.pointerId);
+  if (wasSingle && moved <= 4 && ev.type === "pointerup") select(ev.offsetX, ev.offsetY);
+  if (pointers.size === 0) { drag = null; pinch = null; canvas.classList.remove("dragging"); }
+  else if (pointers.size === 1) { const [p] = [...pointers.values()]; drag = { x: p.x, y: p.y, ox: view.ox, oy: view.oy }; pinch = null; }
+};
+canvas.addEventListener("pointerup", endPointer);
+canvas.addEventListener("pointercancel", endPointer);
+canvas.addEventListener("pointerleave", () => { tip.hidden = true; });
+canvas.addEventListener("wheel", ev => { ev.preventDefault(); zoomAt(ev.offsetX, ev.offsetY, Math.exp(-ev.deltaY * 0.0015)); }, { passive: false });
+$("#zin").onclick = () => zoomAt(cw / 2, ch / 2, 1.6);
+$("#zout").onclick = () => zoomAt(cw / 2, ch / 2, 1 / 1.6);
+$("#zfit").onclick = fitView;
+
+function cellAt(mx, my) {
+  const wx = (mx - view.ox) / view.k, wy = (my - view.oy) / view.k;
+  if (wx < 0 || wy < 0 || wx > W || wy > H) return -1;
+  return lastFind = world.M.del.find(wx, wy, lastFind);
+}
+function hover(mx, my) {
+  if (!world) return;
+  const i = cellAt(mx, my); if (i < 0) { tip.hidden = true; return; }
+  const { T, R, S } = world; let txt;
+  if (T.type[i] === 0) { const p = R.provs[R.owner[i]], s = S.own[p.id]; txt = p.name + " · " + (s >= 0 ? S.states[s].name : "Unclaimed"); }
+  else { const b = R.bodies[R.waterName[i]]; txt = b ? b.name : "Open water"; }
+  tip.textContent = txt; tip.style.left = mx + "px"; tip.style.top = my + "px"; tip.hidden = false;
+}
+
+/* ---------------- inspector ---------------- */
+const elev = e => Math.round(Math.pow(e, 1.6) * 7400 / 10) * 10;
+const rain = m => Math.round((Math.pow(m, 1.3) * 3200 + 80) / 10) * 10;
+function select(mx, my) {
+  if (!world) return;
+  const i = cellAt(mx, my); if (i < 0) { ui.sel = null; insp.hidden = true; drawCrisp(); return; }
+  const G = world, { M, T, R, S, F } = G, kmPx = G.worldKm / W, cellKm2 = M.cellArea * kmPx * kmPx;
+  if (T.type[i] !== 0) {
+    const b = R.bodies[R.waterName[i]];
+    ui.sel = { water: i, edges: null };
+    const depthM = T.type[i] === 1 ? Math.round(Math.pow(T.depth[i], 1.2) * 6000 / 10) * 10 : Math.round((T.filled[i] - T.e[i]) * 3000 + 20);
+    insp.innerHTML = `<button class="close" aria-label="Close details">×</button><h3>${esc(b ? b.name : "Open water")}</h3><div class="sub">${b ? b.kind : "Water"}</div>
+      <dl class="kv"><dt>Depth here</dt><dd class="num">${fmt(depthM)} m</dd><dt>Surface temp.</dt><dd class="num">${Math.round(G.C.temp[i])} °C</dd></dl>`;
+  } else {
+    const pid = R.owner[i], p = R.provs[pid], sid = S.own[pid], st = sid >= 0 ? S.states[sid] : null;
+    const mass = R.masses[p.mass];
+    const edges = [];
+    for (let e = 0; e < M.E; e++) { const a = M.eA[e], b = M.eB[e]; if ((T.type[a] === 0 && R.owner[a] === pid) !== (T.type[b] === 0 && R.owner[b] === pid)) edges.push(e); }
+    ui.sel = { prov: pid, edges: Int32Array.from(edges) };
+    const rows = [
+      ["Terrain", TERR[p.terr]], ["Biome", BIOMES[p.biome].n],
+      ["Elevation", `<span class="num">${fmt(elev(p.e))} m</span>`], ["Avg. temp.", `<span class="num">${Math.round(p.temp)} °C</span>`],
+      ["Rainfall", `<span class="num">${fmt(rain(p.moist))} mm/yr</span>`], ["Area", `<span class="num">${fmt(p.size * cellKm2)} km²</span>`],
+    ];
+    if (p.coastal) rows.push(["Coast", esc(R.bodies[p.coastBody] ? R.bodies[p.coastBody].name : "Open sea")]);
+    if (p.lakeShore >= 0) rows.push(["Lakeshore", esc(R.bodies[p.lakeShore].name)]);
+    if (p.rivers.length) rows.push(["Rivers", esc(p.rivers.slice(0, 3).map(r => R.rivers[r].name).join(", "))]);
+    if (p.range >= 0) rows.push(["Range", esc(R.ranges[p.range].name)]);
+    if (p.plateau >= 0 && R.plats[p.plateau]) rows.push(["Plateau", esc(R.plats[p.plateau].name)]);
+    const tags = [];
+    if (F.volcProv[pid] >= 0) tags.push(`<div class="tag t-danger"><b>Volcano: ${esc(F.volcanoes[F.volcProv[pid]].name)}</b>An active peak on a plate collision.</div>`);
+    if (F.hostile[pid] >= 0) { const h = F.hostRegions[F.hostile[pid]]; tags.push(`<div class="tag t-danger"><b>Hostile wildlife · ${TIER_NAME[h.tier]}</b>${esc(h.creature)} roam ${h.provs.length} province${h.provs.length > 1 ? "s" : ""} here.</div>`); }
+    if (F.titan[pid] >= 0) { const t = F.titans[F.titan[pid]]; tags.push(`<div class="tag t-titan"><b>Titan domain</b>${esc(t.name)} roams ${t.provs.length} provinces. Settlements here do not last.</div>`); }
+    if (F.mystery[pid] >= 0) { const s = F.sites[F.mystery[pid]]; tags.push(`<div class="tag t-myst"><b>${esc(s.name)}</b>${esc(s.d)}</div>`); }
+    if (F.special[pid]) { const sp = SPECIAL[F.special[pid]]; tags.push(`<div class="tag t-wood"><b>${sp.n}</b>${sp.d}</div>`); }
+    let realm = "";
+    if (st) {
+      let area = 0; for (const q of st.provs) area += R.provs[q].size;
+      realm = `<h4>Realm</h4><dl class="kv"><dt>Name</dt><dd>${esc(st.name)}</dd><dt>Capital</dt><dd>${esc(R.provs[st.capital].name)}${st.capital === pid ? " (this province)" : ""}</dd>
+        <dt>Provinces</dt><dd class="num">${fmt(st.provs.length)}</dd><dt>Area</dt><dd class="num">${fmt(area * cellKm2)} km²</dd></dl>`;
+    }
+    insp.innerHTML = `<button class="close" aria-label="Close details">×</button><h3>${esc(p.name)}</h3>
+      <div class="sub">${st ? "Province of " + esc(st.name) : "Unclaimed wilderness"} · ${esc(mass.name || "Unnamed islet")}</div>
+      <dl class="kv">${rows.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join("")}</dl>
+      ${tags.length ? `<div class="tags">${tags.join("")}</div>` : ""}${realm}`;
+  }
+  insp.hidden = false;
+  insp.querySelector(".close").onclick = () => { ui.sel = null; insp.hidden = true; drawCrisp(); };
+  drawCrisp();
+}
+
+/* ---------------- sidebar stats + legend ---------------- */
+function updateStats() {
+  const G = world, { M, R, S, F } = G, kmPx = G.worldKm / W;
+  const rows = [
+    ["World size", `${fmt(G.worldKm)} × ${fmt(G.worldKm * H / W)} km`],
+    ["Land area", `${fmt(R.land.length * M.cellArea * kmPx * kmPx / 1e6)} M km²`],
+    ["Continents", R.conts.length], ["Named islands", R.masses.filter(m => !m.continent && m.name).length],
+    ["Provinces", fmt(R.provs.length)], ["Realms", S.states.length],
+    ["Mountain ranges", R.ranges.length], ["Named rivers", R.rivers.length], ["Lakes & inland seas", R.bodies.filter(b => b.lake).length],
+    ["Titans", F.titans.length], ["Hostile zones", F.hostRegions.length], ["Mystery sites", F.sites.length], ["Volcanoes", F.volcanoes.length],
+  ];
+  $("#stats").innerHTML = rows.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join("");
+}
+function buildLegend() {
+  if (!world) return;
+  const { C, R, F } = world, mode = ui.mode, parts = [];
+  const hatchCss = (c, cross) => `background:repeating-linear-gradient(45deg,${c} 0 1.5px,transparent 1.5px 5px)${cross ? `,repeating-linear-gradient(-45deg,${c} 0 1.5px,transparent 1.5px 5px)` : ""}`;
+  if (mode === "biome" || mode === "terrain") {
+    const counts = new Map(); for (const i of R.land) counts.set(C.biome[i], (counts.get(C.biome[i]) || 0) + 1);
+    const list = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+    parts.push(`<h5>Biomes</h5>` + list.map(([b]) => `<div class="li"><span class="sw" style="background:${BIOMES[b].c}"></span>${BIOMES[b].n}</div>`).join(""));
+    if (ui.layers.mysteries) {
+      const sp = new Set(F.special.filter(v => v));
+      if (sp.size) parts.push(`<div class="sep"></div><h5>Strange lands</h5>` + [...sp].map(t => `<div class="li"><span class="sw" style="background:${SPECIAL[t].c}"></span>${SPECIAL[t].n}</div>`).join(""));
+    }
+  } else if (mode === "height") {
+    parts.push(`<h5>Elevation</h5><div class="bar" style="background:linear-gradient(90deg,${HYPSO.map(([t, c]) => `rgb(${c.join(",")}) ${t * 100}%`).join(",")})"></div><div class="barlab"><span>0 m</span><span>${fmt(elev(0.5))}</span><span>${fmt(elev(1))} m</span></div>`);
+    parts.push(`<h5 style="margin-top:10px">Ocean depth</h5><div class="bar" style="background:linear-gradient(90deg,#b9d9e6,#16344f)"></div><div class="barlab"><span>0 m</span><span>6,000 m</span></div>`);
+  } else {
+    parts.push(`<h5>Realms</h5><div class="li">${world.S.states.length} realms, colored so neighbors differ</div><div class="li"><span class="sw" style="background:#d4cfc2"></span>Unclaimed ice</div>`);
+  }
+  const f = [];
+  if (ui.layers.wildlife) for (let t = 1; t <= 3; t++) f.push(`<div class="li"><span class="sw" style="${hatchCss(HOSTILE_COL[t])}"></span>Hostile wildlife: ${TIER_NAME[t]}</div>`);
+  if (ui.layers.titans) f.push(`<div class="li"><span class="sw" style="${hatchCss("#6b2f86", true)}"></span>Titan domain</div>`);
+  if (ui.layers.mysteries) f.push(`<div class="li"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 1 12 7.5 7.5 14 3 7.5Z" fill="#f2c75a" stroke="#3b2a10" stroke-width="1.3"/></svg>Mystery site</div>`);
+  f.push(`<div class="li"><svg width="15" height="15" viewBox="0 0 15 15"><path d="M7.5 3 13.5 13 1.5 13Z" fill="#5a3326"/><circle cx="7.5" cy="3" r="2.3" fill="#f06a2a"/></svg>Volcano</div>`);
+  parts.push(`<div class="sep"></div><h5>Wilds & wonders</h5>` + f.join(""));
+  $("#legend").innerHTML = parts.join("");
+}
+
+/* ---------------- wiring ---------------- */
+$("#modes").addEventListener("click", ev => {
+  const b = ev.target.closest("button"); if (!b) return;
+  ui.mode = b.dataset.mode;
+  document.querySelectorAll("#modes button").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  if (world) { computeColors(); buildLegend(); drawCrisp(); }
+});
+for (const key of Object.keys(ui.layers)) {
+  const el = $("#L-" + key);
+  el.addEventListener("change", () => {
+    ui.layers[key] = el.checked;
+    if (!world) return;
+    if (key === "mysteries") computeColors(); else buildCache();
+    buildLegend(); drawCrisp();
+  });
+}
+$("#legendToggle").onclick = () => $("#legend").classList.toggle("collapsed");
+$("#gen").onclick = () => generate(0);
+$("#dice").onclick = () => { $("#seed").value = randomSeed(); generate(0); };
+$("#seed").addEventListener("keydown", ev => { if (ev.key === "Enter") generate(0); });
+
+buildControls();
+$("#seed").value = "aldermoor-17";
+resize();
+new ResizeObserver(resize).observe(canvas);
+if (window.matchMedia("(min-width: 861px)").matches) $("#legend").classList.remove("collapsed");
+if (typeof d3 === "undefined" || !d3.Delaunay) {
+  statusEl.textContent = "Couldn't load the geometry library. Check your internet connection and reload.";
+} else {
+  generate(0).then(() => document.fonts && document.fonts.ready.then(() => drawCrisp()));
+}
+</script>

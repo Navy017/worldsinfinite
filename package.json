@@ -1,0 +1,21 @@
+{
+  "name": "worldsinfinite",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "Procedural world generator from planet to street, with living history and hidden lore",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/artifact.mjs",
+    "preview": "vite preview",
+    "bench": "node bench/bench.mjs"
+  },
+  "dependencies": {
+    "d3-delaunay": "^6.0.4"
+  },
+  "devDependencies": {
+    "vite": "^8.3.1",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}

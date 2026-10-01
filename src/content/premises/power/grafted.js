@@ -1,0 +1,193 @@
+// The Grafted: monster hunters made by mutation after the worlds collided, and what the trial really is.
+export default {
+  id: "grafted",
+  name: "The Grafted",
+  family: "power",
+  pitch: "When other worlds collided with ours, monsters spilled in. The only people who can hunt them are children put through poison trials that kill most of them and leave the rest not fully human.",
+  slots: ["augmentation", "monster-source", "power-access"],
+  tone: ["grim", "horror"],
+  era: ["medieval", "renaissance"],
+  scale: "regional",
+  genres: ["fantasy", "grimdark"],
+  w: 1,
+  excludes: [],
+  pairs: [{ id: "balanced_circle", w: 3 }, { id: "thinning", w: 2 }, { id: "splinter_world", w: 2 }, { id: "elder_lattice", w: 1.5 }],
+
+  power: {
+    name: "the grafting", user: "grafted hunter", users: "grafted hunters",
+    taught: "Children who survive the trial of herbs and mutagens become hunters: faster, keener, proof against poison, able to work five simple signs. They were made to fight the beasts that came when the worlds collided.",
+    rules: ["Most candidates die in the trial; survivors are sterile and age slowly.", "A hunter's brews would kill an ordinary man.", "Five signs only, and each one tires the body.", "If the recipe is lost, no more hunters can be made."],
+    forbidden: "Putting an unwilling child through the trial.",
+  },
+
+  cast: [
+    { role: "investigator", n: "a royal astronomer who keeps the tables of the six lights", home: "inner", stance: "Wants the court to prepare for the next collision, and suspects the hunters already are." },
+    { role: "official", n: "a magistrate of the crown's beast office, who sets the bounties and licenses hunters", home: "capital", stance: "Holds that beasts are mindless spawn and hunters a necessary evil, to be paid and kept outside the walls." },
+    { role: "believer", n: "a preacher of the burnings, who calls the grafted and the mages one filth", home: "border", stance: "Believes the grafted are an abomination, and led the mob that burned the keep." },
+    { role: "survivor", n: "a grafted hunter, the only one of twelve children to live through the last trial at the keep", home: "mountain", stance: "Has buried eleven trial-mates, and wants to know what the trial was really for." },
+  ],
+
+  truths: [
+    { id: "refugees", n: "The monsters are refugees", d: "The beasts came through the collision of worlds as frightened strangers. So did humanity, in the same collision, into a world the elder-folk already held. The hunter schools know it, and they need the monsters to stay feared; at least once they loosed a beast on a village that stopped paying.", tags: ["truth:monster_refugees"],
+      known: [
+        "Hunters' journals describe beasts found hiding in cellars for years without eating anyone. The church and the beast office teach that beasts are mindless spawn of chaos, and that mankind is native to this world.",
+        "Elder-folk songs say they were singing here when people fell screaming out of the sky. A bard claims the old school paid a man to loose a marsh-beast on a village that had stopped hiring hunters.",
+        "The ivy halls of the elder-folk show a sky with two moons and small hairless strangers falling through a tear in it. In the foundations, the newcomers' first knives are kept in cases as curiosities.",
+        "Confirmed: the monsters are refugees, and so are we. Humanity fell through the same collision as the beasts, into a world the elder-folk already held. The hunter schools kept the beasts feared because fear paid.",
+      ] },
+    { id: "become", n: "The hunters become the monsters", d: "The mutagen is distilled from the beasts it is made to hunt. Pushed too far, a hunter turns into one. The worst monsters of legend were once the greatest hunters, and the schools post bounties on their own masters and collect the fee.", tags: ["truth:hunters_wake"],
+      known: [
+        "A ruler's attempt to make hunters by the thousand left forty survivors who cannot stop shaking, and two growing fur. The beast office says the trial adds nothing foreign to a body, and fines anyone who says otherwise.",
+        "A school register records a master failing to return from the road, and in the same week, in the same hand, a bounty on a beast of the crossroads. {survivor} recognised the handwriting.",
+        "In the lair under the crossroads, the largest skeleton wears a hunter's harness buckled from the inside, and a medallion from the same school that still trembles. The carters stopped vanishing the week it died.",
+        "Confirmed: the hunters become the monsters. The mutagen is made from beasts, and pushed far enough a hunter turns into one. The schools know it, post bounties on their own masters, and take the contracts.",
+      ] },
+    { id: "lifeboat", n: "The mutagen is a lifeboat", d: "The trial was built to let people live in a world with different air, sickness and magic. A second collision is coming, and only the grafted will survive it. The first school's founders knew, and the mobs that burned the schools have burned the only lifeboat.", tags: ["truth:graft_lifeboat"],
+      known: [
+        "Six faint lights are drawing nearer each year. {investigator}, the royal astronomer, says the worlds are drifting together again. The church says the collision was a single judgement, never to return.",
+        "The first school's founding charter, cut with a knife, speaks of 'some of us' breathing 'the air that is coming'. A dying master told a pupil that the hunting was only to pay the bills.",
+        "A ring of standing stones is aligned to six points not in our sky, and a cave chart counts down the generations to the next collision. Three marks are left.",
+        "Confirmed: the trial is a lifeboat that fits a body to another world's air and sickness. The next collision is three generations away, only the grafted will breathe through it, and the schools that make them have been burned.",
+      ] },
+  ],
+
+  tags: ["grafted"],
+
+  subthemes: [
+    { id: "last_school", n: "The Last School", d: "A mob sacked the hunters' fortress-school and burned the laboratory. Three old hunters are left, and nobody knows if the recipe survived.", w: 1.2, mods: [["mountain", 2], ["zealous", 1.5]], truthLink: "lifeboat", tags: ["theme:last_school"], mark: { kind: "zone", n: "The sacked keep", color: "#4a4a3a", size: [1, 1], where: "mountain" } },
+    { id: "elder_blood", n: "The Child of Old Blood", d: "A girl with elder-folk blood can open doors in the air. Kings, mages and the elder-folk themselves want her, and only an old hunter stands between them.", w: 0.7, mods: [["arcane", 1.5], ["near:rift", 2]], tags: ["theme:elder_blood"] },
+    { id: "graft_army", n: "The Grafted Army", d: "A ruler tried to make an army of hunters by the thousand. Most died; the survivors shake, and some have started growing fur.", w: 0.9, req: { any: ["autocracy", "martial", "standing_army"] }, truthLink: "become", tags: ["theme:graft_army"] },
+    { id: "contract_work", n: "The Bounty-Boards", d: "Every village well has a notice nailed to it. Every monster on the board turns out, underneath, to be a human story: a curse, a grudge, a grief.", w: 1.4, mods: [["poor", 1.5], ["forest", 1.5], ["marsh", 1.5]], tags: ["theme:contract_work"] },
+    { id: "elder_insurgency", n: "The Elder-Folk Insurgency", d: "The first-comers, driven from their white cities, wage war from the forests. Their archers only aim at the eye.", w: 1, req: { any: ["forest", "jungle", "forest_folk"] }, truthLink: "refugees", tags: ["theme:elder_insurgency"], mark: { kind: "zone", n: "Elder-folk woods", color: "#3a5a3a", size: [2, 4], where: "forest" } },
+    { id: "winter_hunt", n: "The Winter Hunt", d: "On the longest nights a hunt of ghost-riders from another world crosses the hills. They are looking for someone, and they do not care who is in the way.", w: 0.8, req: { any: ["cold", "mountain", "hills"] }, tags: ["theme:winter_hunt"] },
+    { id: "conclave", n: "The Conclave", d: "Mages who channel the wild-magic left by the collision advise every king. They start wars to test theories, and lately they have started fighting each other.", w: 1, req: { any: ["arcane", "arcane_council", "gov:magocracy", "hierarchical"] }, tags: ["theme:conclave"] },
+    { id: "fated_sisters", n: "The Fated Sisterhood", d: "An order of women warriors who took a beast's blood into their own. They count their years like a fuse, and each will turn in the end.", w: 0.8, mods: [["martial", 1.5], ["pious", 1.5]], truthLink: "become", tags: ["theme:fated_sisters"] },
+    { id: "curse_born", n: "The Curse-Born", d: "Not every monster came through the collision. A king's daughter walks at night with a wolf's jaw, cursed at birth by a woman her father wronged.", w: 0.9, mods: [["monarchy", 1.5], ["dynastic", 1.5]], tags: ["theme:curse_born"] },
+    { id: "next_alignment", n: "The Next Alignment", d: "Astronomers have found six faint lights drawing nearer each year. They say the worlds are drifting together again.", w: 0.8, req: { any: ["scholarly", "faith:stars", "seers", "academies"] }, truthLink: "lifeboat", tags: ["theme:next_alignment"] },
+    { id: "burnings", n: "The Burnings", d: "Zealots preach that the grafted and the mages are one filth. Hunters ride through the region with their hoods up and their swords loose.", w: 1, req: { any: ["zealous", "pious", "gov:theocracy"] }, tags: ["theme:burnings"] },
+  ],
+
+  sites: [
+    { id: "broken_keep", n: "The Broken Keep of $", kind: "ruin", where: "mountain", d: "A hunters' fortress-school on a high pass, its gates burned.",
+      layers: {
+        surface: { n: "Burned gates", text: "A fortress-school stands on a high pass, its gates burned and its courtyard grown over with nettles. A mob from the valley sacked it in {year}. Shepherds say three old hunters still come up once a year and sit in the yard." },
+        study: { n: "Names on the doors", text: "The laboratory still stinks of herbs. The children's cells have names scratched on the doors, 140 of them, most crossed out. {survivor}, who trained here, can name every one of the last twelve." },
+        dig: { n: "The iron chest", points: "cast:survivor", text: "In the deepest vault is an iron chest, and inside it a ledger with its last pages torn away. The tear is clean, cut with a knife. The last hunter to leave the keep alive took those pages and now lives in {lead}." },
+        revelation: { n: "Enough", text: "The last whole page counts the final trial: twelve children, one survivor, and the masters' note: 'the child will have to be enough.' The torn pages were the recipe. The masters gave them to the survivor and sent the child down the cliff the night the preachers' mob came up the road." },
+      } },
+    { id: "spinning_ring", n: "The Spinning Ring of $", kind: "anomaly", where: "remote", truthLink: "lifeboat", d: "A ring of standing stones where the first collision broke through, and compasses still spin.",
+      layers: {
+        surface: { n: "Spinning compasses", text: "Twelve standing stones ring a moor where compasses spin and horses will not graze. Each stone is twice a man's height. Drovers take their herds two miles round, and calves born near the ring have odd-coloured eyes." },
+        study: { n: "Six points", text: "{investigator}, the royal astronomer, sighted along the stones for a year. They are aligned not to the sun or moon but to six points that are not in our sky, and the six points match the faint lights now brightening." },
+        dig: { n: "Soil from elsewhere", points: "site:chart_cave", text: "Under the central stone lies soil from somewhere else: red, warm, and full of seeds no one can name. The same red soil is packed into the floor of a painted cave at {lead}, under a chart of the same six lights." },
+        revelation: { n: "The next collision", text: "The worlds touched here, and the stones were raised to track when they would touch again. The six lights are much closer than when the stones were set. The first hunters' school was founded the year the stones were finished, by the same people, and for the same day." },
+      } },
+    { id: "ivy_halls", n: "The Ivy Halls of $", kind: "ruin", where: "forest", truthLink: "refugees", d: "Elder-folk ruins older than any human town.",
+      layers: {
+        surface: { n: "Doors too tall", text: "Ivy-swallowed halls of white stone stand in the forest, with doors twelve feet high. Woodcutters used to shelter in them in storms. Elder-folk archers shot three of them through the eye this year for doing so." },
+        study: { n: "Two moons", text: "The carvings show a sky with two moons and strangers falling through a tear in it: small, hairless, holding on to each other. {investigator} counted 200 falling figures in a single panel." },
+        dig: { n: "Curiosities", points: "sub:elder_insurgency", text: "In the foundations are no human bones, but human tools kept in cases: the newcomers' first knives, labelled in elder script as curiosities. The elder-folk who kept the label-book now fight from the woods of {lead}." },
+        revelation: { n: "We are their monsters", text: "People came through the collision too, on the same night as the beasts. The elder-folk were here first. They fed the newcomers, and were driven from their white cities within 300 years. We are the monsters of their legends, and the church still teaches that mankind is native here." },
+      } },
+    { id: "medallion_lair", n: "The Medallion Lair of $", kind: "dig", where: "any", truthLink: "become", d: "A monster's lair under a crossroads that holds a hunter's medallion, still trembling.",
+      layers: {
+        surface: { n: "Gnawed bones", text: "A cave lies beneath a crossroads, littered with gnawed bones. Carters vanished on the road for nine years. The bounty nailed to the well rose from 5 crowns to 60 before anyone claimed it." },
+        study: { n: "A trembling medallion", text: "Among the bones lies a hunter's medallion, still trembling as if something dangerous were near. It trembles harder in the hand. {survivor} identified the mark on its back as their own school's." },
+        dig: { n: "Buckled from inside", points: "archive", text: "The largest skeleton in the lair wears scraps of a hunter's harness, buckled from the inside and stretched to splitting. The school's register entry for a master who 'failed to return' that year is held in {lead}." },
+        revelation: { n: "It wore the medallion first", text: "The beast of the crossroads was a master hunter of the school who took one draught too many, grew the fur, and went on hunting. The school posted the bounty on its own master in the same week, took the contract, and paid itself the fee." },
+      } },
+    { id: "chart_cave", n: "The Chart Cave of $", kind: "ruin", where: "mountain", d: "A cave whose ceiling is painted with our stars, and six others.",
+      layers: {
+        surface: { n: "A painted sky", text: "A cave high on the mountain has its ceiling painted with stars, in a blue that has not faded. Herders light fires in the mouth. In 600 years the smoke has never blackened the paint." },
+        study: { n: "Six extra lights", text: "The stars are ours, set as they stood about 600 years ago, {investigator} reckons. But there are six extra lights, painted in a row, each a little larger than the last, as if coming closer." },
+        dig: { n: "Counting down", points: "library", text: "Beside the chart, tallies count down by generations, with a hunter's sign beside each. Three marks are left. The same sign heads the founding charter of the first school, a copy of which is held in {lead}." },
+        revelation: { n: "Making ready", text: "The founders of the first school painted this chart and cut these tallies. They knew the worlds would touch again, and built the trial so that some people would breathe the new air. They told no one but their masters. Three generations are left, and the schools have been burned." },
+      } },
+  ],
+
+  beings: [
+    { id: "mire_wight", n: "Mire-wight", kind: "predator", d: "A creature like a drowned corpse that rises from bog pools at dusk, calling in the voice of whoever it last took.", danger: 2, biomes: ["swamp", "mangrove", "river"], look: { size: 1.6, group: [1, 3], move: "solo", speed: 6, col: "#4a5a3a", col2: "#8a9a6a", body: "biped", active: "night", visible: true } },
+    { id: "barrow_grinner", n: "Barrow-grinner", kind: "predator", d: "A grey, long-jawed corpse-eater that digs into old barrows and new graves alike, and laughs while it eats.", danger: 2, biomes: ["tempforest", "grass", "boreal", "badlands"], look: { size: 1.4, group: [2, 6], move: "pack", speed: 12, col: "#6a6a5a", col2: "#c0b090", body: "quad", active: "night", visible: true } },
+    { id: "carrion_wing", n: "Carrion-wing", kind: "raptor", d: "A leathery scavenger that follows armies and plagues in screaming flocks, and is not above finishing the wounded.", danger: 1, biomes: ["grass", "badlands", "savanna", "swamp"], look: { size: 1.2, group: [4, 20], move: "flock", speed: 40, col: "#3a2a2a", col2: "#8a3a3a", body: "bird", active: "dusk", visible: true } },
+    { id: "woken_hunter", n: "Woken hunter", kind: "beast", d: "A hunter pushed past the last trial: tall, furred, cat-eyed, still wearing a medallion. It remembers its sword-forms and nothing else.", danger: 3, biomes: ["boreal", "alpine", "tempforest"], look: { size: 2.4, group: [1, 1], move: "solo", speed: 16, col: "#5a4a4a", col2: "#e0e0d0", body: "biped", active: "night", visible: true } },
+  ],
+
+  techs: [
+    { id: "gf_bestiary", n: "The bestiary", field: "natural_philosophy", level: 1, d: "A catalogue of every beast that came through: its bane, its lair and its habits." },
+    { id: "gf_herb_trial", n: "The trial of herbs", field: "medicine", level: 2, d: "Children fed a ladder of poisons and mutagens; the few who live become hunters." },
+    { id: "gf_blade_oils", n: "Blade oils", field: "alchemy", level: 2, d: "Oils for silver and steel, each brewed against one kind of beast." },
+    { id: "gf_signs", n: "The five signs", field: "arcana", level: 3, d: "Simple gestures that push, burn, ward, calm or snare, worked by the grafted alone." },
+    { id: "gf_distillation", n: "Mutagen distillation", field: "alchemy", level: 4, d: "The trial's essences refined from what the hunters bring home. Nobody asks what goes into the still." },
+    { id: "gf_sphere_reckoning", n: "Sphere-reckoning", field: "astronomy", level: 5, d: "Tables that predict when the worlds will next draw together." },
+  ],
+
+  units: [
+    { id: "gf_hunters", n: "Grafted hunters", role: "infantry", wpn: "sword", kit: "light", ranks: 1, gap: 4, size: 6, w: 0.3, mods: [["theme:last_school", 8], ["theme:contract_work", 3]] },
+    { id: "gf_elder_archers", n: "Elder-folk archers", role: "ranged", wpn: "bow", kit: "light", ranks: 3, gap: 2, size: 60, w: 0.3, mods: [["theme:elder_insurgency", 12], ["forest_folk", 2]] },
+    { id: "gf_graft_regiment", n: "Graft-regiment", role: "beast", wpn: "axe", kit: "hide", ranks: 3, gap: 1.6, size: 60, w: 0.2, mods: [["theme:graft_army", 15]] },
+  ],
+
+  mapMarks: [
+    { kind: "zone", n: "Monster mires", color: "#4a5a3a", size: [1, 3], count: [1, 3], where: "remote", d: "Haunted marshes and barrows where the bounty-boards always have a notice." },
+    { kind: "zone", n: "Collision scars", color: "#7a5a7a", size: [1, 1], count: [0, 2], where: "remote", d: "Moors where the first collision tore through. Compasses spin and the grass grows in spirals." },
+  ],
+
+  storylines: [
+    { id: "gf_contract", n: "The Beast of {place}", scale: "local", anchor: "town", w: 2, req: "grafted",
+      stages: {
+        start: { h: "A beast haunts the road at {place}", b: "Three carters have been taken on the road outside {place}. The alderman has nailed a notice to the well: a bounty for whoever kills the thing.", wait: [1, 4], next: [{ to: "hunter_comes", w: 2 }, { to: "locals_try", w: 1, mods: [["martial", 1.5], ["zealous", 1.5]] }] },
+        locals_try: { h: "The men of {place} hunt the beast themselves", b: "Refusing to pay a mutant, the men of {place} went out with pitchforks and dogs. Two did not come back.", wait: [1, 3], fx: { unrest: 4 }, next: [{ to: "hunter_comes", w: 1 }, { to: "burned_wrong", w: 1, mods: [["zealous", 2]] }] },
+        hunter_comes: { h: "A grafted hunter rides into {place}", b: "{person}, a hunter with a scarred face and cat's eyes, has taken the contract. The innkeeper charged double for the room.", wait: [1, 3], next: [{ to: "beast_killed", w: 2 }, { to: "curse_lifted", w: 1, mods: [["theme:curse_born", 3]] }] },
+        beast_killed: { h: "{person} brings the beast's head to {place}", b: "The thing was a barrow-grinner the size of a pony. The alderman paid half, the town spat at the hunter's horse, and the road is safe.", fx: { stability: 2 }, end: true },
+        curse_lifted: { h: "The beast of {place} was a woman", b: "{person} came back with no head, only a story: the beast was the alderman's wife, cursed by his mistress. The curse is lifted, and the town has not forgiven the hunter for it.", fx: { unrest: 6 }, end: true },
+        burned_wrong: { h: "{place} burns the wrong creature", b: "The mob burned a hermit they found in the woods. The carters are still vanishing.", fx: { unrest: 8, stability: -3 }, end: true },
+      } },
+    { id: "gf_last_trial", n: "The Keep above {place}", scale: "local", anchor: "town", w: 1.2, req: "grafted",
+      stages: {
+        start: { h: "A mob marches on the hunters' keep above {place}", b: "Preachers in {place} call the grafted abominations. A crowd with torches is on the road to the old keep where the last hunters train.", wait: [1, 3], next: [{ to: "keep_falls", w: 2 }, { to: "defended", w: 1, mods: [["tolerant", 2], ["ruler:just", 2]] }] },
+        defended: { h: "Soldiers turn back the mob at {place}", b: "Riders of {realm} met the crowd on the bridge and sent it home. The hunters have sealed their gates and say nothing.", fx: { stability: 2 }, end: true },
+        keep_falls: { h: "The hunters' keep burns", b: "The keep above {place} burned through the night. {person}, the youngest hunter, escaped down the cliff with a satchel and the recipe book.", wait: [3, 8], fx: { unrest: 6 }, next: [{ to: "new_trial", w: 1 }, { to: "recipe_lost", w: 1 }, { to: "recipe_sold", w: 0.7, mods: [["autocracy", 2], ["theme:graft_army", 3]] }] },
+        new_trial: { h: "{person} holds a new trial", b: "In a hidden valley, {person} has put twelve orphans through the trial of herbs. Four lived, and the hunters have a future again.", fx: { discovery: "medicine", unrest: 4 }, end: true },
+        recipe_lost: { h: "The recipe of the grafted is lost", b: "{person} was found dead on the north road, the satchel empty. No more hunters will ever be made.", fx: { stability: -2 }, end: true },
+        recipe_sold: { h: "The recipe is sold to the crown", b: "{person} traded the recipe to the court of {realm} for a pardon. The royal surgeons have begun their own trials, on prisoners.", fx: { science: { alchemy: 1 }, unrest: 8 }, end: true },
+      } },
+    { id: "gf_alignment", n: "The Lights over {realm}", scale: "realm", anchor: "realm", w: 0.8, req: ["grafted", { any: ["scholarly", "seers", "faith:stars", "academies", "learned"] }],
+      stages: {
+        start: { h: "Astronomers of {realm} see the worlds drawing near", b: "Six faint lights never in the old charts are brightening over {capital}. {investigator} and the astronomers of {realm} say the worlds are drifting together again.", wait: [4, 10], next: [{ to: "panic", w: 1, mods: [["unstable", 2], ["zealous", 1.5]] }, { to: "prepare", w: 1, mods: [["learned", 2], ["ruler:brilliant", 2]] }, { to: "ignored", w: 1 }] },
+        panic: { h: "Panic grips {realm}", b: "Preachers proclaim the end of the world. Mobs blame the grafted and burn their houses, as if that would stop the sky.", wait: [3, 6], fx: { unrest: 15, stability: -6 }, next: [{ to: "collision", w: 1 }, { to: "passes", w: 1 }] },
+        prepare: { h: "{ruler} sends for the grafted", b: "{ruler} has summoned every hunter in {realm} to {capital} and asked them one question: what do we need to survive? The hunters are drawing up lists.", wait: [4, 8], fx: { treasury: -40 }, next: [{ to: "collision", w: 1 }, { to: "passes", w: 1 }] },
+        ignored: { h: "The court of {realm} dismisses the astronomers", b: "The lights are a trick of the lenses, says the court. The astronomers of {realm} have been told to look at something else.", wait: [4, 10], next: [{ to: "collision", w: 1 }, { to: "passes", w: 2 }] },
+        collision: { h: "The worlds touch over {realm}", b: "For one night, other skies with strange suns and moons showed through the sky over {realm}. In the morning new beasts walked the hills, the air tasted of copper, and only the grafted went about their work as if nothing had changed.", fx: { pop: 0.85, stability: -12, flag: "collision" }, end: true },
+        passes: { h: "The lights fade over {realm}", b: "The six lights dimmed and drew apart. The astronomers have revised their tables: the next approach is two lifetimes away.", fx: { stability: 3 }, end: true },
+      } },
+  ],
+
+  fragments: [
+    { depth: "lore", about: "power", source: "library", bias: "official", reliable: true, who: "The school bestiary, foreword", text: "From the foreword of the school bestiary, copied at the keep in {year}: 'Oil the blade for what came through the sky; bare steel will do for what was born here. A hunter is a child who survived the trial of herbs, which kills most who take it. A hunter who forgets the oil will not forget it twice. Of the 30 beasts in this book, 22 need the oil.'" },
+    { depth: "lore", about: "power", source: "oral", bias: "garbled", reliable: "partial", who: "A miller of {place}, to a son", text: "A miller of {place}, warning a son who was about to hire a hunter, {year}: 'Pay a hunter in coin, and count it out on the table. My cousin had no coin the year of the mire-beast, so the hunter took the youngest child instead, as the old contracts allow. That's how the schools fill their cells. The child was seven. Not a letter in 20 years, and the cousin still keeps a bowl at the table.'" },
+    { depth: "lore", about: "power", source: "archive", bias: "official", reliable: true, points: "site:broken_keep", who: "Ledger of the hunters' school, autumn trial", text: "Ledger of the hunters' school at {lead}, autumn trial, {year}: 'Candidates, twelve. Survived the herbs, three. Survived the first winter, two. Cost per hunter reckoned below: herbs, 40 crowns; graves, 10.' The ledger is in the masters' hand. The children's names were kept in a separate book, which has not been found." },
+    { depth: "core", about: "truth:refugees", source: "ruin", bias: "true", reliable: true, plain: true, who: "Elder-folk carving in the ivy halls, read by {investigator}", text: "Carved in the ivy halls in elder script, read by {investigator} in {year}: 'In the year the sky tore, the new ones fell through with the beasts, hairless and afraid. They were not from here, and neither were the beasts; both ran from the same tear. We fed them. We should have fed them less.' The carving is dated 1,100 years ago by the elder reckoning." },
+    { depth: "core", about: "truth:refugees", source: "heretic", bias: "heretic", reliable: "partial", points: "site:ivy_halls", who: "Elder-folk lament, taken down by a captured scout", text: "Lament of the elder-folk, sung in the woods and written down by a captured scout, {year}: 'You call our cities ruins and our children monsters. We were singing here when your ancestors fell screaming out of the sky.' The scout added that the song names the hall at {lead} as the place where the first humans were fed, for 40 years." },
+    { depth: "core", about: "truth:refugees", source: "person", bias: "true", reliable: "partial", cost: true, who: "{survivor}, hunter, private journal", text: "Private journal of {survivor}, hunter, {year}: 'Killed the thing in the cellar at {place}. It was hiding. It had hidden there nine years and never eaten anyone; the owner of the house, {person}, had been feeding it bread. The alderman paid in full, 20 crowns. {person} was hanged as a witch for the bread. I drank the fee.'" },
+    { depth: "core", about: "truth:refugees", source: "traveller", bias: "exaggerated", reliable: "partial", points: "cast:official", who: "A travelling bard's song-notes", text: "Song-notes of a travelling bard, sold to a printer in {place}, {year}: 'I saw the old school's masters pay a man 5 crowns to loose a marsh-beast near a village that had stopped hiring hunters. Within a month the village hired them again, at double. I put it in a song. The beast office in {lead} paid me not to sing it.'" },
+    { depth: "core", about: "truth:refugees", source: "library", bias: "official", reliable: false, who: "Bestiary of the beast office, preface by {official}", text: "Bestiary of the crown's beast office, preface signed by {official}, magistrate, {year}: 'The beasts are the spawn of chaos, malicious by nature and without mind. Mankind is native to this world, as scripture plainly teaches. Bounties are payable on 31 kinds of beast. Elder-folk are not beasts, and are paid at half rate.'" },
+    { depth: "core", about: "truth:become", source: "ruin", bias: "true", reliable: true, plain: true, who: "Vat label in the broken keep, copied by {investigator}", text: "Label on a vat in the laboratory of the broken keep, copied by {investigator} in {year}: 'Ghoul-marrow, third distillation. For the second trial only. Do not let the children see the source.' Beside it, a master's note: 'The draught is made from the beasts. Too much, and the hunter becomes one. Record every master's doses, and post the bounty quickly.'" },
+    { depth: "core", about: "truth:become", source: "archive", bias: "redacted", reliable: "partial", cost: true, points: "site:medallion_lair", who: "School register, two entries", text: "School register, {year}: '{person}, master, eleventh trial, failed to return from the road.' The same week, in the same hand: 'Bounty posted, 60 crowns, beast of the crossroads at {lead}. School to take the contract.' {person}'s medallion was never returned to the school. The entry for the fee is marked 'paid to ourselves'." },
+    { depth: "core", about: "truth:become", source: "oral", bias: "garbled", reliable: "partial", who: "A woodcutter of the north, to {survivor}", text: "Told by a woodcutter of the north to {survivor}, {year}: 'The great beast of the north wore an old medallion round its neck. It took nine men and a hunter to bring it down. When it died it said thank you, plain as you or me. The hunter sat by it till dark and wouldn't let us skin it.'" },
+    { depth: "core", about: "truth:become", source: "person", bias: "exaggerated", reliable: "partial", who: "A sister of the fated order, to a novice", text: "Letter of a sister of the fated order to a novice, {year}: 'Every one of us will turn. We count our years like a fuse; mine has about seven left. When my eyes go yellow, my sisters will do what they must, and I will thank them. Learn the knot for the burial shroud before you learn the sword.'" },
+    { depth: "core", about: "truth:become", source: "library", bias: "official", reliable: false, who: "Beast office statement, signed by {official}", text: "Statement of the crown's beast office on the grafted, signed by {official}, {year}: 'The grafted are wholly human in mind and soul. The trial strengthens what is already there and adds nothing foreign to it. Reports of hunters growing fur are spread by the burnings preachers, and 3 such preachers have been fined.'" },
+    { depth: "core", about: "truth:lifeboat", source: "ruin", bias: "true", reliable: true, plain: true, who: "Founders' tallies beside the star chart, copied by {investigator}", text: "Tallies beside the star chart in the mountain cave, one for each generation, counting down; copied by {investigator} in {year}. Three are left. Under them, the founders of the first school wrote: 'When the six lights meet, the air will change, and the old sicknesses with it. Only the grafted will breathe it. We made the trial for that day, not for beasts.'" },
+    { depth: "core", about: "truth:lifeboat", source: "archive", bias: "redacted", reliable: "partial", points: "site:chart_cave", who: "Founding charter of the first school, crown copy", text: "From the founding charter of the first hunters' school, crown archive copy, {year}: '...that some of us at least shall breathe the air that is coming, as the chart at {lead} foretells...' The rest has been cut away with a knife. The archivist notes that the cut was made about 200 years ago." },
+    { depth: "core", about: "truth:lifeboat", source: "person", bias: "true", reliable: "partial", cost: true, who: "A dying master, to {survivor}", text: "Last words of a dying master to {survivor}, the only one of 12 children to live through the final trial, {year}: 'We were never meant to hunt monsters. The hunting was only to pay the bills until the sky came down. Your eleven brothers and sisters died to make one who could breathe it. Do not waste it on bounties.'" },
+    { depth: "core", about: "truth:lifeboat", source: "heretic", bias: "exaggerated", reliable: "partial", points: "cast:investigator", who: "Unsigned pamphlet on a bounty-board", text: "Pamphlet nailed to the bounty-board at {place}, {year}, unsigned: 'When the next collision comes, your kings will choke on the new air and the grafted will inherit the earth. That is why the schools were burned: not because the hunters are monsters, but because the crown cannot bear to be outlived. Count the lights yourself. There are 6. Ask the astronomer at {lead}.'" },
+    { depth: "core", about: "truth:lifeboat", source: "temple", bias: "official", reliable: false, who: "Feast-day sermon of the {faith}", text: "Sermon of the {faith} for the feast of the Sky's Mending, {year}, as printed for every parish: 'The collision was a single judgement of {deity}, long past and never to return. Those who speak of another are false prophets. The six so-called lights are a fault in the astronomers' lenses, which the temple has kindly offered to pay to have reground.'" },
+    { depth: "sub", about: "sub:contract_work", source: "archive", bias: "official", reliable: "partial", who: "Bounty notice on the well at {place}", text: "Bounty notice nailed to the well at {place}, {year}, stamped by the beast office: 'Wanted, dead: the thing in the mill. Tall, pale, weeps at night. Twenty crowns. Hunters only.' Below, in charcoal, someone has added: 'It is the miller's brother. He came back from the war wrong. Please.'" },
+    { depth: "sub", about: "sub:graft_army", source: "person", bias: "true", reliable: true, who: "A royal field surgeon, letter to the court physician", text: "Letter of a field surgeon of the royal army to the court physician, {year}: 'Three hundred men took the draught. Forty are alive. None of them can stop shaking, and two have begun to grow fur along the spine. I have stopped the second batch. If the order comes to start it again, find another surgeon.'" },
+    { depth: "sub", about: "sub:conclave", source: "library", bias: "propaganda", reliable: false, who: "Public letter of the Conclave", text: "Public letter of the Conclave of mages, read at the courts of {realm}, {year}: 'The Conclave advises the crowns of the world from pure love of order, and has never once taken a side in any war.' The Conclave's own minutes, leaked the same year, record four wars started 'to test the theory of the third wild-current'." },
+    { depth: "sub", about: "sub:elder_insurgency", source: "oral", bias: "exaggerated", reliable: "partial", who: "A forester of {place}, to a recruiting officer", text: "Told by a forester of {place} to a recruiting officer, {year}: 'The elder-folk in the forest can put an arrow through your eye from a mile off, and they only ever aim at the eye. They shot five of my crew this spring. Every one of the five had cut a tree inside the white stones, and I signed the felling orders.'" },
+    { depth: "sub", about: "sub:winter_hunt", source: "oral", bias: "garbled", reliable: "partial", who: "An innkeeper of the hill road, to a guest", text: "Told by an innkeeper of the hill road to a winter guest, {year}: 'On the longest nights the Hunt rides over the hills, 13 riders, and the hounds have no hides. Bar the door, and if they knock, don't answer. They're looking for someone, and it isn't you, and they don't care. Last winter they took the carter's lad for asking.'" },
+    { depth: "sub", about: "sub:burnings", source: "temple", bias: "pious", reliable: "partial", points: "site:broken_keep", who: "{believer}, preacher of the burnings", text: "Street sermon of {believer}, preacher of the burnings, in the square of {place}, {year}: 'The hunter and the mage are one filth. The hunter drinks the beast; the mage drinks the sky. Burn the one and the other will know you mean it. We burned the keep at {lead} in a single night, 400 of us, and not one was bitten.'" },
+    { depth: "site", about: "site:spinning_ring", source: "traveller", bias: "true", reliable: "partial", points: "site:spinning_ring", who: "A cattle drover's diary", text: "Diary of a cattle drover, {year}: 'My compass spun at the stones at {lead} and kept spinning for a day after we left. The horses would not eat the grass inside the ring, and two calves born that week had eyes of different colours. I will add two miles to the route next year.'" },
+    { depth: "site", about: "site:medallion_lair", source: "oral", bias: "true", reliable: "partial", points: "site:medallion_lair", who: "The alderman of {place}, to the beast office", text: "Told by the alderman of {place} to the beast office, {year}: 'An old hunter came to see the medallion from the cave at {lead}. Turned it over, read the back, took it home and wept, and would not say whose it was. Paid me 3 crowns for it. I asked whether the road was safe now. The hunter said it had been safe for nine years.'" },
+  ],
+};

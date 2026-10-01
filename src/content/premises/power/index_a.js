@@ -1,0 +1,12 @@
+import balanced_circle from "./balanced_circle.js";
+import vowfire from "./vowfire.js";
+import grudgewell from "./grudgewell.js";
+import hungerfruit from "./hungerfruit.js";
+import bound_nine from "./bound_nine.js";
+import shadeself from "./shadeself.js";
+import quickening from "./quickening.js";
+import tally from "./tally.js";
+import ore_burning from "./ore_burning.js";
+import sworn_kindred from "./sworn_kindred.js";
+import sundered_wellspring from "./sundered_wellspring.js";
+export const PREMISES = [balanced_circle, vowfire, grudgewell, hungerfruit, bound_nine, shadeself, quickening, tally, ore_burning, sworn_kindred, sundered_wellspring];
